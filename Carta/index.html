@@ -13,7 +13,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
+      min-height: 100vh;
       margin: 0;
       text-align: center;
       color: #333;
@@ -90,6 +90,57 @@
     .return-btn:hover {
       background-color: #ff2a66;
     }
+/* Contenedor general para las fotos */
+.photos-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin: 20px auto;
+}
+
+.polaroid {
+  position: relative;
+  width: 150px;
+  background-color: white;
+  padding: 10px 10px 30px 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  transition: transform 0.3s ease;
+}
+
+.polaroid img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border: 1px solid #eee;
+}
+
+.pic-1 { transform: rotate(-5deg); }
+.pic-2 { transform: rotate(5deg); }
+
+.polaroid::before {
+  content: "";
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70px;
+  height: 25px;
+  background-color: rgba(169, 151, 249, 0.5);
+  backdrop-filter: blur(2px);
+  border: 1px solid rgba(0,0,0,0.03);
+  z-index: 10;
+}
+.final-message {
+  margin: 30px auto;
+  padding: 10px;
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.4em;
+  color: #ff4f81; /* Color rosa para que combine con el botón */
+  text-align: center;
+  max-width: 80%;
+  line-height: 1.4;
+}
     @keyframes fadeIn {
       from {opacity: 0; transform: scale(0.95);}
       to {opacity: 1; transform: scale(1);}
@@ -114,23 +165,39 @@
     <img src="media/carta_afuera.png" alt="Carta lista" class="main-img" onclick="nextScreen(5)">
   </div>
   <div class="screen" id="screen5">
+    <div class="card" style="margin: 40% auto; padding: 40px 60px;">
+      <p>Para iniciar, disculpa que esta carta sea virtual; sabes que soy un poco más de dar cosas en físico, pero pues la situación... ¿qué te digo? :)) Ahí me tienes, corriendo y haciendo todo esto en un día, pero bueno, espero que sea de tu agrado. Habiendo dicho eso, ahora sí, inicia la carta.</p>
+    </div>
+    <div style="margin-bottom: 5%;"></div>
+    <br>
     <div class="card">
-      <h3>Querido Darlin,</h3>
-      <p>No sé muy bien cómo empezar esta carta, pero sentí
-        que necesitaba escribirte lo que a veces no me animo 
-        a decirte en persona. Desde que te conocí, algo en mí
-        cambió. No fue algo repentino, sino poco a poco… como
-        cuando el sol empieza a salir y sin darte cuenta,
-        ya está iluminando todo.</p>
-      <p>Me gusta la forma en que hablas, cómo me haces reír
-        incluso cuando no tengo ganas, y esa tranquilidad
-        que me das sin siquiera intentarlo. A veces pienso
-        en ti sin motivo, solo porque sí, y
-        me descubro sonriendo.</p>
-      <p>Eres alguien especial para mí. Que te valoro, 
-        te admiro y, sobre todo, te tengo un cariño enorme.</p>
-      <p>Con mucho afecto,</p>
-      <p>Mireya 💌</p>
+      <h3>Hola, Hayleen</h3>
+
+<p>La verdad no sabía muy bien cómo empezar esta carta, pero es que este último año se me fue volando. Parece que fue ayer cuando empezamos a hablar y solo quiero agradecerte por haberme permitido entrar en tu vida. Me gusta mucho cómo eres y lo fácil que es ser yo mismo cuando platicamos.</p>
+<p>Sé que este año ha tenido sus retos para ti, y verte cumplir un año más con esa sonrisa tan linda me hace sentir muy orgulloso y feliz.</p>
+<p>No te puedo decir que este año será mejor porque aún no aprendo a leer el futuro; aun así, te puedo decir que, siempre que sea posible, estaré para ayudarte a afrontar esos problemas... es una promesa.</p>
+<p>Quizás estos días no se nos cumpla el vernos para darte ese abrazo gigante que te mereces, salir a caminar o inventar cualquier tontería, pero te envío uno virtual con todo mi corazón.</p>
+</div>
+    <br>
+    <div class="card">
+      <p> A veces no encuentro las palabras exactas para decirte cuánto te quiero, pero espero que lo sientas en este mensaje.</p>
+      <p>Pásala increíble en tu cumple y recuerda: si en algún momento te aburres (o simplemente quieres compartir algo), aquí estaré siempre disponible para platicar un buen rato.</p>
+      <br>
+      <div class="photos-wrapper">
+        <div class="polaroid pic-1">
+          <img src="media/banana.png" alt="Momento 1">
+        </div>
+        <p>    </p>
+        <div class="polaroid pic-2">
+          <img src="media/dump.jpeg" alt="Momento 2">
+        </div>
+      </div>
+      <div class="final-message">
+        <p style="text-align: center;">Con mucho cariño,</p>
+        <p style="text-align: center;">Luis 💖</p>
+      </div>
+      <p style="font-size: 1em;">PD: Considera esta carta como un "Vale por una salida a comer y un abrazo de oso" , que cobraré en cuanto nos veamos. Si se me olvida a mi me lo recuerdas, y si se te olvida a ti te lo recuerdo yo</p><p style="text-align: center; font-size: 1em;">Te quiero como no te imaginas💗</p>
+
     </div>
     <div style="text-align: center;">
       <button class="return-btn" onclick="nextScreen(1)">🔙 Regresar</button>
