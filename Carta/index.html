@@ -43,6 +43,7 @@
     .main-img:hover {
       transform: scale(1.05);
     }
+    
     .card {
       background: repeating-linear-gradient(
         white,
@@ -70,7 +71,7 @@
     }
     .card p {
       font-family: 'Dancing Script', cursive;
-      font-size: 1.3em;
+      font-size: 1em;
       line-height: 1.6;
       text-align: justify;
       color: #444;
@@ -145,6 +146,29 @@
       from {opacity: 0; transform: scale(0.95);}
       to {opacity: 1; transform: scale(1);}
     }
+    /* Estilos para Celulares (Pantallas menores a 600px) */
+@media (max-width: 600px) {
+  .card {
+    padding: 20px 30px; /* Reducimos el margen interno */
+  }
+
+  .card h3 {
+    font-size: 1.5em; /* Título un poco más pequeño */
+  }
+
+  .card p {
+    font-size: 0.9em; /* Párrafos un poco más pequeños */
+    line-height: 1.4;
+  }
+
+  .main-img {
+    width: 200px; /* Imagen del sobre más pequeña en móvil */
+  }
+
+  .final-message {
+    font-size: 1.2em;
+  }
+}
   </style>
 </head>
 <body>
@@ -167,14 +191,16 @@
   <div class="screen" id="screen5">
     <div class="card" style="margin: 40% auto; padding: 40px 60px;">
       <p>Para iniciar, disculpa que esta carta sea virtual; sabes que soy un poco más de dar cosas en físico, pero pues la situación... ¿qué te digo? :)) Ahí me tienes, corriendo y haciendo todo esto en un día, pero bueno, espero que sea de tu agrado. Habiendo dicho eso, ahora sí, inicia la carta.</p>
+      <p style="text-align: center; font-size: 1em;">scrolea abajo</p>
+      <p style="text-align: center; font-size: 1em;">⬇️</p>
     </div>
     <div style="margin-bottom: 5%;"></div>
     <br>
     <div class="card">
       <h3>Hola, Hayleen</h3>
 
-<p>La verdad no sabía muy bien cómo empezar esta carta, pero es que este último año se me fue volando. Parece que fue ayer cuando empezamos a hablar y solo quiero agradecerte por haberme permitido entrar en tu vida. Me gusta mucho cómo eres y lo fácil que es ser yo mismo cuando platicamos.</p>
-<p>Sé que este año ha tenido sus retos para ti, y verte cumplir un año más con esa sonrisa tan linda me hace sentir muy orgulloso y feliz.</p>
+<p>La verdad no sabía muy bien cómo empezar esta carta, pero es que este último año se me fue volando. Parece que fue ayer cuando empezamos a hablar, solo quiero agradecerte por haberme permitido entrar en tu vida. Me gusta mucho cómo eres y lo fácil que es ser yo mismo cuando platicamos.</p>
+<p>Sé que este año ha tenido sus retos para ti, y verte cumplir un año más con esa sonrisa tan linda que tienes me hace sentir muy orgulloso y feliz.</p>
 <p>No te puedo decir que este año será mejor porque aún no aprendo a leer el futuro; aun así, te puedo decir que, siempre que sea posible, estaré para ayudarte a afrontar esos problemas... es una promesa.</p>
 <p>Quizás estos días no se nos cumpla el vernos para darte ese abrazo gigante que te mereces, salir a caminar o inventar cualquier tontería, pero te envío uno virtual con todo mi corazón.</p>
 </div>
