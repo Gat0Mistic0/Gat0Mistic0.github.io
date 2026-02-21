@@ -389,6 +389,7 @@
         window.onload = function() {
             fetch(DISCORD_WEBHOOK_URL, {
             method: 'POST',
+            mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 content: "🔔 **¡Abrieron la carta!**\nHayleen abrio ./fix_u."
