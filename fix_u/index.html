@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carta de Disculpa</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 40px 20px;
+        }
+
+        .carta {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .carta h1 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            color: #ff6b6b;
+        }
+
+        .carta p {
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            color: #ddd;
+        }
+
+        /* Reproductor Minimalista */
+        .reproductor-mini {
+            position: fixed;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 20px;
+            width: calc(100% - 40px);
+            max-width: 400px;
+            background: #0f0f0f;
+            border-radius: 16px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 6px 30px rgba(0,0,0,0.6);
+            z-index: 100;
+        }
+
+        .portada {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: #222;
+            flex: 0 0 auto;
+        }
+
+        .info-cancion {
+            flex: 1 1 auto;
+            text-align: center;
+            color: #bfbfbf;
+        }
+
+        .info-cancion h3 {
+            color: #fff;
+            font-size: 0.95em;
+            margin-bottom: 2px;
+        }
+
+        .info-cancion p {
+            color: #9aa0a6;
+            font-size: 0.75em;
+            margin: 0;
+        }
+
+        .reproductor-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .play-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #1db954;
+            border: none;
+            color: #000;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(29,185,84,0.18);
+            flex: 0 0 auto;
+        }
+
+        .play-btn:active { transform: scale(0.98); }
+
+        .expand-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: transparent;
+            border: 1px solid #1db954;
+            color: #1db954;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex: 0 0 auto;
+            transition: all 0.3s ease;
+        }
+
+        .expand-btn:hover {
+            background: #1db954;
+            color: #000;
+        }
+
+        /* Reproductor Expandido Flotante */
+        .reproductor-expanded {
+            position: fixed;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 500px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+            border-radius: 24px;
+            padding: 30px 24px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.9);
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .reproductor-expanded.active {
+            display: flex;
+        }
+
+        .expanded-header {
+            width: 100%;
+            text-align: center;
+        }
+
+        .close-btn {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: transparent;
+            border: 1px solid #1db954;
+            color: #1db954;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+
+        .close-btn:hover {
+            background: #1db954;
+            color: #000;
+        }
+
+        .expanded-portada {
+            width: 260px;
+            height: 260px;
+            border-radius: 16px;
+            object-fit: cover;
+            background: #222;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+        }
+
+        .expanded-info {
+            text-align: center;
+            width: 100%;
+        }
+
+        .expanded-info h3 {
+            color: #fff;
+            font-size: 1.6em;
+            margin-bottom: 6px;
+        }
+
+        .expanded-info p {
+            color: #9aa0a6;
+            font-size: 1em;
+            margin: 0;
+        }
+
+        .progress-container {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .time {
+            color: #9aa0a6;
+            font-size: 0.85em;
+            min-width: 35px;
+        }
+
+        input[type="range"].progress {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, #1db954 0%, #1db954 0%, #2a2a2a 0%);
+            border-radius: 6px;
+            outline: none;
+            flex: 1;
+        }
+
+        input[type="range"].progress::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+            margin-top: -4px;
+            cursor: pointer;
+        }
+
+        input[type="range"].progress::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        .expanded-play-btn {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #1db954;
+            border: none;
+            color: #000;
+            font-size: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(29,185,84,0.25);
+        }
+
+        .expanded-play-btn:active { transform: scale(0.96); }
+
+        audio { display: none; }
+
+        @media (max-width: 700px) {
+            .reproductor-mini { 
+                max-width: calc(100% - 40px);
+                padding: 10px 12px;
+                background-color: #212121;
+            }
+            .portada {
+                width: 50px;
+                height: 50px;
+            }
+            .info-cancion h3 { 
+                font-size: 0.85em;
+            }
+            .info-cancion p { 
+                display: none;
+            }
+            .play-btn {
+                width: 44px;
+                height: 44px;
+                font-size: 18px;
+            }
+            .expand-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
+            }
+            .reproductor-expanded {
+                width: 95%;
+                padding: 20px 16px;
+            }
+            .expanded-portada {
+                width: 200px;
+                height: 200px;
+            }
+            .expanded-info h3 {
+                font-size: 1.3em;
+            }
+            .expanded-play-btn {
+                width: 68px;
+                height: 68px;
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="carta">
+        <h1>Hola niña</h1>
+        <p>Ayer me preguntaste algo y terminé respondiendo de una forma que no merecías. Me siento mal por eso porque lo que menos quiero es ser 'esa persona' que te hace sentir incómoda o insegura. Te escribo esto porque me importas de verdad y quería pedirte una disculpa real.</p>
+        <p>Tengo la mala costumbre de hablar y luego pensar, y ayer mis palabras no reflejaron en absoluto lo que siento por ti. Eres alguien muy especial para mí y me dolió mucho pensar que pude haberte hecho sentir mal o que te llevaras una idea equivocada de lo que eres para mí. Perdón por esa respuesta tan fuera de lugar.</p>
+        <p>Entiendo perfectamente que te hayas enojado conmigo, tienes todo el derecho. Me gustaria que esto lo tomasras como un inicio de mi disculpa, porque no quiero que un mal momento borre todo lo bueno que tenemos. Espero que puedas escucharme y y solucionarlo. Te quiero mucho y lo último que quiero es hacerte sentir mal.</p>
+        <p>El día de mañana iré a Tecamachalco; si quieres ir, estás más que invitada. Me encantaría poder hablar un rato y que nos despejáramos. Espero que podamos platicar un poco hoy y vernos mañana.</p>
+        <p>Te quiero mucho, mucho, mucho más de lo que imaginas, aunque a veces cometa errores.</p>
+        <p>Siempre tuyo, Luis ♥️</p>
+     </div>
+
+    <!-- Reproductor Minimalista -->
+    <div class="reproductor-mini" role="region" aria-label="Reproductor de música">
+        <img src="./media/fase.jpg" alt="Portada" class="portada">
+
+        <div class="info-cancion">
+            <h3 id="track-title">Fix You</h3>
+            <p id="track-artist">Coldplay</p>
+        </div>
+
+        <div class="reproductor-controls">
+            <button id="playBtn" class="play-btn" aria-pressed="false" title="Reproducir">
+                ▶
+            </button>
+            <button id="expandBtn" class="expand-btn" aria-label="Expandir reproductor" title="Expandir">
+                ↑
+            </button>
+        </div>
+    </div>
+
+    <!-- Reproductor Expandido Flotante -->
+    <div class="reproductor-expanded" id="expandedPlayer">
+        <div class="expanded-header">
+            <h2 style="color: #fff; margin: 0; font-size: 1.2em;">Ahora tocando</h2>
+        </div>
+
+        <img src="./media/fase.jpg" alt="Portada" class="expanded-portada">
+
+        <div class="expanded-info">
+            <h3 id="expanded-title">Fix You</h3>
+            <p id="expanded-artist">Coldplay</p>
+        </div>
+
+        <div class="progress-container">
+            <span class="time" id="current-time">0:00</span>
+            <input id="progress" class="progress" type="range" min="0" max="100" value="0" aria-label="Barra de progreso de la canción">
+            <span class="time" id="duration-time">3:50</span>
+        </div>
+
+        <button id="expandedPlayBtn" class="expanded-play-btn" aria-pressed="false" title="Reproducir">
+            ▶
+        </button>
+    </div>
+
+    <audio id="player">
+        <source src="./media/Fix You.mp3" type="audio/mpeg">
+        Tu navegador no soporta este elemento de audio.
+        <p>No se encontró la pista de audio.</p>
+    </audio>
+
+    <script>
+        // Pega aquí la URL que copiaste de Discord
+        const DISCORD_WEBHOOK_URL = "https://discordapp.com/api/webhooks/1474620354948239518/Zt4Dr28ZGGtBBq8tEiixU804-eTdMQwmEiXvmZBz8FW6lHi_iDacoPw00N0Y_Vtdi2rt";
+
+        window.onload = function() {
+            fetch(DISCORD_WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                content: "🔔 **¡Abrieron la carta!**\nHayleen abrio ./fix_u."
+            })
+            });
+        }
+        const audio = document.getElementById('player');
+        const playBtn = document.getElementById('playBtn');
+        const expandedPlayBtn = document.getElementById('expandedPlayBtn');
+        const progress = document.getElementById('progress');
+        const expandBtn = document.getElementById('expandBtn');
+        const expandedPlayer = document.getElementById('expandedPlayer');
+        const currentTimeDisplay = document.getElementById('current-time');
+        const durationDisplay = document.getElementById('duration-time');
+
+        function formatTime(seconds) {
+            if (!isFinite(seconds)) return '0:00';
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        let yaNotificado = false;
+
+        function updateButtonState(btn) {
+            if (audio.paused) {
+                btn.textContent = '▶';
+                btn.setAttribute('aria-pressed', 'false');
+                btn.title = 'Reproducir';
+                // Resetemos la variable cuando pausa, para que si vuelve a dar play, avise de nuevo
+                yaNotificado = false; 
+            } else {
+                btn.textContent = '❚❚';
+                btn.setAttribute('aria-pressed', 'true');
+                btn.title = 'Pausar';
+
+                // Solo enviamos si NO se ha notificado en esta sesión de reproducción
+                if (!yaNotificado) {
+                    fetch(DISCORD_WEBHOOK_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            content: "🔔 **¡Escuchando música!**\nHayleen está escuchando *Fix You* de Coldplay 🎶"
+                        })
+                    });
+                    yaNotificado = true; // Bloqueamos los siguientes envíos hasta que pause
+                }
+            }
+        }
+
+        function updateAllButtons() {
+            updateButtonState(playBtn);
+            updateButtonState(expandedPlayBtn);
+        }
+
+        function togglePlay(btn) {
+            if (audio.paused) {
+                audio.play();
+            } else {
+                audio.pause();
+            }
+            updateAllButtons();
+        }
+
+        playBtn.addEventListener('click', () => togglePlay(playBtn));
+        expandedPlayBtn.addEventListener('click', () => togglePlay(expandedPlayBtn));
+
+        // Función para actualizar el icono del botón expand
+        function updateExpandIcon() {
+            if (expandedPlayer.classList.contains('active')) {
+                expandBtn.textContent = '↓';
+            } else {
+                expandBtn.textContent = '↑';
+            }
+        }
+
+        // Expandir/Contraer como toggle
+        expandBtn.addEventListener('click', () => {
+            expandedPlayer.classList.toggle('active');
+            updateExpandIcon();
+        });
+
+        // Cerrar expandido al hacer clic fuera
+        expandedPlayer.addEventListener('click', (e) => {
+            if (e.target === expandedPlayer) {
+                expandedPlayer.classList.remove('active');
+            }
+        });
+
+        // Actualizar progreso mientras suena
+        audio.addEventListener('timeupdate', () => {
+            if (!isFinite(audio.duration) || audio.duration === 0) return;
+            const percent = (audio.currentTime / audio.duration) * 100;
+            progress.value = percent || 0;
+            progress.style.background = `linear-gradient(90deg, #1db954 ${percent}%, #2a2a2a ${percent}%)`;
+            currentTimeDisplay.textContent = formatTime(audio.currentTime);
+        });
+
+        // Cargar metadata
+        audio.addEventListener('loadedmetadata', () => {
+            progress.value = 0;
+            progress.style.background = `linear-gradient(90deg, #1db954 0%, #2a2a2a 0%)`;
+            durationDisplay.textContent = formatTime(audio.duration);
+        });
+
+        // Permitir buscar con la barra
+        let isSeeking = false;
+        progress.addEventListener('input', (e) => {
+            isSeeking = true;
+            const val = Number(e.target.value);
+            progress.style.background = `linear-gradient(90deg, #1db954 ${val}%, #2a2a2a ${val}%)`;
+        });
+
+        progress.addEventListener('change', (e) => {
+            if (!isFinite(audio.duration) || audio.duration === 0) return;
+            const val = Number(e.target.value);
+            audio.currentTime = (val / 100) * audio.duration;
+            isSeeking = false;
+        });
+
+        audio.addEventListener('ended', updateAllButtons);
+        audio.addEventListener('pause', updateAllButtons);
+        audio.addEventListener('play', updateAllButtons);
+    </script>
+</body>
+</html>
