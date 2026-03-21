@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Index - Gat0Mistic0</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body { font-family: Arial, sans-serif; margin: 1.2rem; background: #f9fafb; color: #0f172a; }
+    h1, h2 { color: #0f172a; }
+    ul { padding-left: 1rem; }
+    li { margin: .35rem 0; }
+    a { color: #0f4bd8; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Index del proyecto</h1>
+    <p>Enlaces a las carpetas y archivos principales de la raíz.</p>
+
+    <section class="card">
+      <h2>Árbol de carpetas</h2>
+      <div id="folder-tree"></div>
+    </section>
+
+    <section class="card">
+      <h2>Notas</h2>
+      <p>
+        - Si cada carpeta tiene su propio <code>index.html</code>, puedes navegar directamente desde los enlaces.
+        <br />- Ajusta estilos en <code>styles.css</code> si deseas un diseño más personal.
+      </p>
+    </section>
+  </main>
+
+  <script>
+    const folderTree = {
+      "Carta": [],
+      "NewPaper": {
+        "index.html": null,
+        "media": {
+          "IMG_20250509_225632_656.jpg": null,
+          "VID_20250402_215503_861.mp4": null
+        }
+      },
+      "Sunflawer": [],
+      "_K1XBR~Z": {
+        "index.html": null,
+        "media": {
+          "banana.png": null,
+          "carta_abierta.png": null,
+          "carta_afuera.png": null,
+          "carta_cerrada.png": null,
+          "dibujo.png": null,
+          "dump.jpeg": null
+        }
+      },
+      "fix_u": {
+        "index.html": null,
+        "media": {
+          "Fix You.mp3": null,
+          "fase.jpg": null
+        }
+      }
+    };
+
+    function createTree(tree, basePath = "") {
+      const ul = document.createElement("ul");
+      Object.keys(tree).forEach((name) => {
+        const li = document.createElement("li");
+        const currentPath = basePath ? `${basePath}/${name}` : name;
+
+        if (tree[name] && typeof tree[name] === "object") {
+          const folderLink = document.createElement("a");
+          folderLink.innerText = name + "/";
+          folderLink.href = encodeURI(`${currentPath}/index.html`);
+          li.appendChild(folderLink);
+
+          const child = createTree(tree[name], currentPath);
+          li.appendChild(child);
+        } else {
+          const fileLink = document.createElement("a");
+          fileLink.innerText = name;
+          fileLink.href = encodeURI(currentPath);
+          li.appendChild(fileLink);
+        }
+
+        ul.appendChild(li);
+      });
+      return ul;
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const container = document.getElementById("folder-tree");
+      container.innerHTML = "";
+      container.appendChild(createTree(folderTree));
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Jardín de Girasoles para Mi Novia</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+    
+    <style>
+        /* 1. RESET Y CONFIGURACIÓN BASE */
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        
+        body {
+            width: 100%;
+            background: #000;
+            overflow-x: hidden;
+            font-family: 'Segoe UI', sans-serif;
+            color: white;
+            /* Bloqueamos el scroll inicialmente */
+            overflow-y: hidden;
+        }
+
+        /* 2. PANTALLA DE ENTRADA */
+        #welcome-screen {
+            position: fixed;
+            inset: 0;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 1.5s ease, visibility 1.5s;
+        }
+
+        .welcome-content { text-align: center; padding: 20px; }
+
+        .welcome-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2.2rem, 10vw, 4rem);
+            color: #ffcc00;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeInText 2.5s forwards;
+        }
+
+        #enter-btn {
+            background: transparent;
+            border: 2px solid #ffcc00;
+            color: #ffcc00;
+            padding: 15px 45px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        #enter-btn:hover {
+            background: #ffcc00;
+            color: #000;
+            box-shadow: 0 0 30px rgba(255, 204, 0, 0.6);
+        }
+
+        .fade-out { opacity: 0; visibility: hidden; }
+
+        /* 3. JARDÍN Y CIELO */
+        .hero-garden {
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(180deg, #4facfe 0%, #1a2c3c 150%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ground {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 35vh;
+            background: linear-gradient(180deg, #22531b 0%, #000000 100%);
+            z-index: 5;
+        }
+
+        .sky-message {
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            text-align: center;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .sky-message h1 {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: clamp(1.8rem, 6vw, 3.8rem);
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+            opacity: 0.9;
+        }
+
+        /* 4. ELEMENTOS VOLADORES */
+        .cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.6); /* Más opacas para que se vean bien */
+            filter: blur(25px);
+            border-radius: 50%;
+            z-index: 2;
+            animation: moveClouds linear infinite;
+        }
+
+        @keyframes moveClouds {
+            from { transform: translateX(-300px); }
+            to { transform: translateX(calc(100vw + 300px)); }
+        }
+
+        .scroll-arrow {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            cursor: pointer;
+            animation: bounce 2s infinite;
+        }
+
+        .arrow-icon {
+            width: 25px; height: 25px;
+            border-bottom: 4px solid #ffcc00;
+            border-right: 4px solid #ffcc00;
+            transform: rotate(45deg);
+        }
+
+        /* 5. DISEÑO DEL GIRASOL */
+        .sunflower {
+            position: absolute;
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+            transform-origin: bottom center;
+            animation: sway 4s ease-in-out infinite;
+        }
+
+        .stem {
+            width: 6px;
+            background: linear-gradient(90deg, #2d5a27, #3a6b24);
+            border-radius: 4px;
+        }
+
+        .leaf {
+            position: absolute;
+            width: 30px; height: 18px;
+            background: #1e3c1a;
+            border-radius: 50% 2px 50% 2px;
+        }
+
+        /* Corregidas las hojas para que apunten bien */
+        .leaf-left { left: -22px; bottom: 40%; transform: rotate(-15deg); }
+        .leaf-right { right: -22px; bottom: 25%; transform: rotate(15deg) scaleX(-1); }
+
+        .head {
+            position: relative;
+            width: 80px; height: 80px;
+            margin-bottom: -10px;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 6;
+        }
+
+        .petals-container {
+            position: absolute;
+            width: 100%; height: 100%;
+            animation: rotate-sun 30s linear infinite;
+        }
+
+        .petal {
+            position: absolute;
+            width: 18px; height: 40px;
+            background: #ffcc00;
+            border-radius: 50% 50% 50% 50% / 80% 80% 20% 20%;
+            left: 50%; top: 50%;
+            transform-origin: center bottom;
+        }
+
+        .center {
+            width: 35px; height: 35px;
+            background: radial-gradient(circle, #3e2723 0%, #1a0f0d 100%);
+            border-radius: 50%;
+            z-index: 7;
+        }
+
+        /* 6. REPRODUCTOR VINILO */
+        .music-player-fixed {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 500;
+            cursor: pointer;
+        }
+
+        .vinyl-container {
+            width: 100px; height: 100px;
+            background: #111;
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            border: 4px solid #222;
+            animation: rotateVinyl 12s linear infinite;
+            animation-play-state: paused; 
+        }
+
+        .vinyl-grooves {
+            position: absolute;
+            inset: 0;
+            background: repeating-radial-gradient(circle, #111 0%, #111 2%, #222 3%, #111 4%);
+            border-radius: 50%;
+            opacity: 0.8;
+        }
+
+        .vinyl-label-image {
+            width: 45%; height: 45%;
+            background: #fff;
+            border-radius: 50%;
+            border: 2px solid #111;
+            overflow: hidden;
+            position: relative;
+            z-index: 10;
+        }
+
+        #vinyl-cover-img { width: 100%; height: 100%; object-fit: cover; }
+
+        .center-hole {
+            position: absolute;
+            width: 6px; height: 6px;
+            background: #000;
+            border-radius: 50%;
+        }
+
+        .is-playing { animation-play-state: running !important; }
+
+        /* ANIMACIONES */
+        @keyframes fadeInText { to { opacity: 1; } }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translate(-50%, 0); } 40% { transform: translate(-50%, -10px); } }
+        @keyframes sway { 0%, 100% { transform: rotate(-2deg) scale(var(--s)); } 50% { transform: rotate(2deg) scale(var(--s)); } }
+        @keyframes rotate-sun { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes rotateVinyl { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        @media (max-width: 600px) {
+            .music-player-fixed { bottom: 20px; right: 20px; transform: scale(0.85); }
+        }
+
+        .story-section {
+            background: linear-gradient(180deg, #000 0%, #0a0a0a 100%);
+            padding: 50px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 150px; /* Espacio grande para que tenga que hacer scroll */
+            padding-bottom: 200px;
+        }
+
+        .message-block {
+            max-width: 600px;
+            text-align: center;
+            opacity: 0.8;
+            transition: transform 0.8s ease;
+        }
+
+        .message-block:hover {
+            opacity: 1;
+            transform: translateY(-10px);
+        }
+
+        .icon-spark {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .message-block h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: #ffcc00;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px rgba(255, 204, 0, 0.3);
+        }
+
+        .message-block p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #ddd;
+            font-weight: 300;
+        }
+
+        .signature {
+            margin-top: 40px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            color: #ffcc00;
+            border-top: 1px solid rgba(255, 204, 0, 0.2);
+            padding-top: 20px;
+        }
+
+        /* Ajuste para que la flecha invite a bajar */
+        .scroll-arrow {
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+        .scroll-arrow:hover { opacity: 1; }
+
+        /* Contenedor principal que oculta el desbordamiento */
+        .music-gallery-wrapper {
+            width: 100%;
+            max-width: 500px; /* Ancho de un solo reproductor */
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        /* La fila que contiene los reproductores */
+        .music-gallery {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory; /* Fuerza el ajuste al deslizar */
+            gap: 20px;
+            padding: 10px 0 20px 0;
+            scrollbar-width: none; /* Oculta barra en Firefox */
+        }
+
+        /* Oculta barra en Chrome/Safari */
+        .music-gallery::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Cada reproductor individual */
+        .music-item {
+            min-width: 100%; /* Cada uno ocupa todo el ancho del contenedor */
+            scroll-snap-align: center; /* Se imanta al centro */
+            transition: transform 0.4s ease;
+        }
+
+        .music-item iframe {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="welcome-screen">
+        <div class="welcome-content">
+            <p class="welcome-text">Hola, amor...</p>
+            <button id="enter-btn" onclick="startExperience()">Entrar a nuestro jardín</button>
+        </div>
+    </div>
+
+    <section class="hero-garden">
+        <div class="container" id="garden">
+            <div class="sky-message">
+                <h1>¿Sabías que eres el sol de mi mundo?</h1>
+            </div>
+            <div class="ground"></div>
+        </div>
+
+        <div class="music-player-fixed" onclick="toggleMusic()">
+            <div class="vinyl-container" id="vinyl-disc">
+                <div class="vinyl-grooves"></div>
+                <div class="vinyl-label-image">
+                    <img src="./media/besame_pront.png" alt="Cover" id="vinyl-cover-img">
+                    <div class="center-hole"></div>
+                </div>
+            </div>
+            <audio id="bg-music" loop>
+                <source src="./media/Bésame (Cnt. 1_1).mp3" type="audio/mpeg">
+            </audio>
+        </div>
+
+        <div class="scroll-arrow" onclick="scrollToText()">
+            <div class="arrow-icon"></div>
+        </div>
+    </section>
+
+    <section class="story-section">
+        <div class="message-block" data-aos="fade-up">
+            <div class="icon-spark">✨</div>
+            <h2>A veces el mundo se siente gris...</h2>
+            <p>Pero entonces me acuerdo de tu sonrisa y todo vuelve a encenderse. Eres esa luz que aparece cuando más la necesito.</p>
+        </div>
+
+        <div class="message-block" data-aos="fade-up">
+            <div class="icon-spark">🌻</div>
+            <h2>Como estos girasoles...</h2>
+            <p>Yo también busco siempre tu calor para saber hacia dónde ir. Gracias por ser mi guía y mi lugar seguro en los días nublados.</p>
+        </div>
+
+        <div class="message-block" data-aos="fade-up">
+            <div class="icon-spark">❤️</div>
+            <h2>Nuestro jardín eterno</h2>
+            <p>Incluso cuando el sol se oculta, este campo mantiene su esencia. Mi amor por ti brilla con luz propia, más allá del tiempo.</p>
+        </div>    
+        <div class="message-block" data-aos="fade-up">
+            <div class="icon-spark">🎵</div>
+            
+            <div class="music-gallery-wrapper">
+                <div class="music-gallery">
+                    <div class="music-item">
+                        <iframe style="border-radius:12px" 
+                                src="https://open.spotify.com/embed/track/1nRRT4Tx2LTuDlyqut5h1C?utm_source=generator" 
+                                width="100%" height="380" 
+                                frameBorder="0" allowfullscreen="" 
+                                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                                loading="lazy">
+                        </iframe>
+                    </div>
+
+                    <div class="music-item">
+                        <iframe allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write" 
+                                frameborder="0" height="380" 
+                                style="width:100%; overflow:hidden; border-radius:12px;" 
+                                sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" 
+                                src="https://embed.music.apple.com/es/song/b%C3%A9same-cnt-1-1/1749943246">
+                        </iframe>
+                    </div>
+                </div>
+                <p style="font-size: 0.9rem; color: #ffcc00; margin-top: 15px; opacity: 0.7;">← Desliza para cambiar →</p>
+            </div>
+        </div>
+        <div class="signature">Siempre tuyo, Luis❤️</div>
+    </section>
+    
+
+    <script>
+        const music = document.getElementById('bg-music');
+        const vinylDisc = document.getElementById('vinyl-disc');
+        const garden = document.getElementById('garden');
+
+        function startExperience() {
+            // 1. Subir al inicio
+            window.scrollTo(0, 0); 
+
+            // 2. Liberar el scroll del body
+            document.body.style.overflowY = 'auto';
+
+            // 3. Ocultar bienvenida
+            document.getElementById('welcome-screen').classList.add('fade-out');
+            
+            // 4. Iniciar Audio
+            music.play().catch(e => console.log("Audio play failed", e));
+            
+            // 5. Girar Vinilo
+            vinylDisc.classList.add('is-playing');
+            
+            // 6. Generar todo el jardín y nubes
+            generateGarden();
+        }
+
+        function toggleMusic() {
+            if (music.paused) {
+                music.play();
+                vinylDisc.classList.add('is-playing');
+            } else {
+                music.pause();
+                vinylDisc.classList.remove('is-playing');
+            }
+        }
+
+        function scrollToText() {
+            document.getElementById('info').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function createClouds() {
+            for (let i = 0; i < 8; i++) {
+                const cloud = document.createElement('div');
+                cloud.className = 'cloud';
+                const size = Math.random() * 180 + 120;
+                cloud.style.width = size + 'px';
+                cloud.style.height = (size * 0.5) + 'px';
+                cloud.style.top = Math.random() * 40 + '%';
+                cloud.style.left = '-350px';
+                cloud.style.animationDuration = (Math.random() * 40 + 50) + 's';
+                cloud.style.animationDelay = (Math.random() * -100) + 's';
+                garden.appendChild(cloud);
+            }
+        }
+
+        function createSunflower(config) {
+            const sunflower = document.createElement('div');
+            sunflower.className = 'sunflower';
+            sunflower.style.left = `${config.x}px`;
+            sunflower.style.bottom = `${config.y}vh`;
+            sunflower.style.setProperty('--s', config.s);
+            sunflower.style.zIndex = Math.floor(100 - config.y);
+            sunflower.style.animationDelay = `${Math.random() * -4}s`;
+
+            const stem = document.createElement('div');
+            stem.className = 'stem';
+            stem.style.height = `${85 + (config.s * 25)}px`;
+
+            const leafL = document.createElement('div'); leafL.className = 'leaf leaf-left';
+            const leafR = document.createElement('div'); leafR.className = 'leaf leaf-right';
+            stem.appendChild(leafL); stem.appendChild(leafR);
+
+            const head = document.createElement('div');
+            head.className = 'head';
+            const petalsContainer = document.createElement('div');
+            petalsContainer.className = 'petals-container';
+
+            for (let i = 0; i < 12; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'petal';
+                petal.style.transform = `translate(-50%, -100%) rotate(${i * 30}deg)`;
+                petalsContainer.appendChild(petal);
+            }
+
+            const center = document.createElement('div'); center.className = 'center';
+            head.appendChild(petalsContainer); head.appendChild(center);
+            sunflower.appendChild(stem); sunflower.appendChild(head);
+            garden.appendChild(sunflower);
+        }
+
+        function generateGarden() {
+            const items = document.querySelectorAll('.sunflower, .cloud');
+            items.forEach(item => item.remove());
+            
+            // Crear nubes
+            createClouds();
+
+            const width = window.innerWidth;
+            const spacing = 80; // Densidad de flores aumentada
+            const columns = Math.floor(width / spacing) + 1;
+
+            for (let i = 0; i <= columns; i++) {
+                const xPos = i * spacing;
+                // Tres capas de girasoles
+                createSunflower({ x: xPos + (Math.random() * 40), y: 28 + (Math.random() * 5), s: 0.6 });
+                createSunflower({ x: (xPos - 40) + (Math.random() * 40), y: 18 + (Math.random() * 5), s: 0.8 });
+                createSunflower({ x: xPos + (Math.random() * 40), y: 8 + (Math.random() * 5), s: 1.1 });
+            }
+        }
+
+        // Ya no llamamos a generateGarden() aquí para que no se vea antes de tiempo
+        // Se llama dentro de startExperience()
+        
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(generateGarden, 250);
+        });
+    </script>
+</body>
+</html>
