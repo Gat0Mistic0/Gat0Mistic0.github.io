@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👾 🐈‍⬛ ✨</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body id="body-bg">
+    <div class="quiz-container">
+        <!-- Introducción -->
+        <div id="intro-section">
+            <h1 class="heart-title">Holapp ✨</h1>
+            <p class="intro-text">
+                ¿Cómo estass?😋<br>
+                La verdad me puse a pensar que ha pasado rato desde que no hablabamos y por tanto
+                en realidad actualmente no nos conocemos.<br>
+                Hice esta pequeña página porque hay cosas que me da curiosidad saber de ti, 
+                y pensé que esta sería una forma más divertida de preguntarlas.
+                <br><br>
+                Tómate tu tiempo para responder, no hay prisa. ❤️
+                
+            </p>
+            <button id="start-btn" class="main-btn">Empezar</button>
+        </div>
+
+        <div id="quiz-section" class="hide">
+            <h2 id="question-text">Cargando...</h2>
+            
+            <div id="open-answer-container" class="hide">
+                <textarea id="user-answer" placeholder="Escribe aquí tu respuesta..."></textarea>
+                <button id="check-btn" class="main-btn">Ver qué supuse</button>
+            </div>
+
+            <div id="options-container" class="btn-grid hide">
+                </div>
+        </div>
+
+        <div id="feedback-section" class="hide">
+            <div id="result-icon"></div>
+            <p id="feedback-message"></p>
+            <div class="my-guess">
+                <span>Mi suposición era:</span>
+                <strong id="guessed-answer"></strong>
+            </div>
+            <button id="next-btn" class="main-btn">Siguiente pregunta</button>
+        </div>
+
+        <div id="final-section" class="hide">
+            <h2>¡Terminamos! 🥰</h2>
+            <p>Al final, no importa si acerté o no; lo que importa es que te hayas divertido y haberte sacado una sonrisa.</p>
+            <span class="heart">❤️</span>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
