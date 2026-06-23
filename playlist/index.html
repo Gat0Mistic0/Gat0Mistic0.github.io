@@ -20,18 +20,20 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 12px;
+            padding: 8px;
             /* reducido para móviles */
         }
 
         .container {
+            width: 95%;
+            /* ← OCUPA EL 95% DEL ANCHO */
             max-width: 600px;
-            width: 100%;
+            /* ← MÁXIMO 600px */
             background: rgba(255, 255, 255, 0.75);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border-radius: 32px;
-            padding: 24px 18px 28px;
+            padding: 20px 16px 24px;
             box-shadow: 0 20px 40px -8px rgba(13, 71, 161, 0.25),
                         0 0 0 1px rgba(255, 255, 255, 0.6);
             transition: all 0.3s ease;
@@ -40,7 +42,7 @@
         /* ===== ENCABEZADO ===== */
         .header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
         .header h1 {
@@ -58,7 +60,7 @@
             font-weight: 300;
             letter-spacing: 0.5px;
             opacity: 0.85;
-            padding: 0 8px;
+            padding: 0 4px;
         }
 
         .header .heart {
@@ -80,12 +82,12 @@
         .player {
             background: rgba(255, 255, 255, 0.6);
             border-radius: 28px;
-            padding: 18px 16px 20px;
+            padding: 16px 14px 18px;
             backdrop-filter: blur(6px);
             -webkit-backdrop-filter: blur(6px);
             box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.8),
                         0 8px 20px rgba(13, 71, 161, 0.06);
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
         /* ---- Info de la canción con portada ---- */
@@ -133,7 +135,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            margin: 14px 0 10px;
+            margin: 12px 0 10px;
         }
 
         .progress-container .time {
@@ -148,14 +150,12 @@
         .progress-bar {
             flex: 1;
             height: 6px;
-            /* más gruesa para táctil */
             background: #b3d4f0;
             border-radius: 10px;
             cursor: pointer;
             position: relative;
             transition: height 0.2s;
             touch-action: none;
-            /* evita scroll al arrastrar */;
         }
 
         .progress-bar:hover {
@@ -223,13 +223,11 @@
 
         /* ===== LISTA DE CANCIONES ===== */
         .playlist {
-            margin-top: 16px;
-            max-height: 200px;
-            /* altura ajustada para móviles */
+            margin-top: 14px;
+            max-height: 190px;
             overflow-y: auto;
             padding-right: 4px;
             -webkit-overflow-scrolling: touch;
-            /* scroll suave en iOS */;
         }
 
         .playlist::-webkit-scrollbar {
@@ -325,9 +323,9 @@
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 22px;
-            padding-top: 18px;
+            gap: 10px;
+            margin-top: 18px;
+            padding-top: 16px;
             border-top: 1px solid rgba(13, 71, 161, 0.15);
         }
 
@@ -335,7 +333,7 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            padding: 8px 16px;
+            padding: 8px 14px;
             border-radius: 50px;
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(4px);
@@ -375,29 +373,20 @@
             border-color: #ff0000;
         }
 
-        .platform-links a.deezer:hover {
-            color: #A238FF;
-            border-color: #A238FF;
-        }
-
-        .platform-links a.tidal:hover {
-            color: #000000;
-            border-color: #000000;
-        }
-
         /* ============================================================ */
-        /* ===== RESPONSIVE PARA MÓVILES (pantallas ≤ 600px) ===== */
+        /* ===== RESPONSIVE ===== */
         /* ============================================================ */
 
         @media (max-width: 600px) {
             body {
-                padding: 8px;
+                padding: 4px;
             }
 
             .container {
-                padding: 18px 12px 22px;
+                width: 96%;
+                /* un poco más de ancho en móviles */
+                padding: 16px 12px 20px;
                 border-radius: 24px;
-                box-shadow: 0 12px 28px rgba(13, 71, 161, 0.2);
             }
 
             .header h1 {
@@ -406,11 +395,10 @@
 
             .header .subtitle {
                 font-size: 0.85rem;
-                padding: 0 4px;
             }
 
             .player {
-                padding: 14px 12px 16px;
+                padding: 14px 10px 16px;
                 border-radius: 22px;
             }
 
@@ -457,8 +445,7 @@
             }
 
             .playlist {
-                max-height: 160px;
-                /* un poco más compacto */;
+                max-height: 150px;
             }
 
             .playlist-item {
@@ -485,8 +472,8 @@
 
             .platform-links {
                 gap: 8px;
-                margin-top: 18px;
-                padding-top: 14px;
+                margin-top: 14px;
+                padding-top: 12px;
             }
 
             .platform-links a {
@@ -500,10 +487,9 @@
             }
         }
 
-        /* Muy pequeños (≤ 400px) */
         @media (max-width: 400px) {
             .container {
-                padding: 14px 10px 18px;
+                padding: 12px 8px 16px;
                 border-radius: 20px;
             }
 
@@ -532,20 +518,21 @@
                 font-size: 0.9rem;
             }
 
+            .playlist {
+                max-height: 130px;
+            }
+
             .playlist-item .item-title {
                 font-size: 0.8rem;
             }
-
-            .playlist {
-                max-height: 140px;
-            }
         }
 
-        /* ===== Ajuste para orientación horizontal en móviles ===== */
+        /* ===== Orientación horizontal en móviles ===== */
         @media (max-height: 500px) and (orientation: landscape) {
             .container {
-                padding: 12px 16px 16px;
+                padding: 10px 14px 14px;
                 border-radius: 20px;
+                width: 92%;
             }
 
             .header h1 {
@@ -559,8 +546,8 @@
             }
 
             .player {
-                padding: 10px 12px 12px;
-                margin-bottom: 10px;
+                padding: 10px 10px 12px;
+                margin-bottom: 8px;
             }
 
             .song-info {
@@ -593,12 +580,12 @@
             }
 
             .playlist {
-                max-height: 100px;
+                max-height: 80px;
             }
 
             .platform-links {
-                margin-top: 10px;
-                padding-top: 10px;
+                margin-top: 8px;
+                padding-top: 8px;
                 gap: 6px;
             }
 
@@ -865,7 +852,6 @@
         function setProgress(e) {
             const rect = progressBar.getBoundingClientRect();
             let clickX = e.clientX - rect.left;
-            // Para eventos táctiles
             if (e.touches) {
                 clickX = e.touches[0].clientX - rect.left;
             }
@@ -900,10 +886,6 @@
                         updatePlayButton();
                     }
                 });
-                // Soporte táctil
-                item.addEventListener('touchstart', (e) => {
-                    // Solo para evitar conflictos con el click, no es necesario hacer nada adicional
-                }, { passive: true });
                 playlistContainer.appendChild(item);
             });
         }
@@ -924,10 +906,8 @@
             nextSong();
         });
 
-        // Eventos para la barra de progreso (ratón y táctil)
         progressBar.addEventListener('click', setProgress);
         progressBar.addEventListener('touchstart', (e) => {
-            // Prevenir comportamiento por defecto (scroll)
             e.preventDefault();
             setProgress(e);
         }, { passive: false });
@@ -950,10 +930,6 @@
 
         renderPlaylist();
         loadSong(0);
-
-        // ============================================================
-        // 6. PERSONALIZA LOS ENLACES A PLATAFORMAS (ya están puestos)
-        // ============================================================
     </script>
 </body>
 </html>
