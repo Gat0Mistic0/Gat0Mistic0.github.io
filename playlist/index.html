@@ -21,14 +21,11 @@
             justify-content: center;
             align-items: center;
             padding: 8px;
-            /* reducido para móviles */
         }
 
         .container {
             width: 95%;
-            /* ← OCUPA EL 95% DEL ANCHO */
             max-width: 600px;
-            /* ← MÁXIMO 600px */
             background: rgba(255, 255, 255, 0.75);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
@@ -94,14 +91,16 @@
         .song-info {
             display: flex;
             align-items: center;
-            gap: 14px;
-            margin-bottom: 10px;
+            gap: 16px;
+            /* un poco más de separación */
+            margin-bottom: 12px;
             padding: 0 2px;
         }
 
         .song-cover {
-            width: 56px;
-            height: 56px;
+            width: 64px;
+            /* más grande */
+            height: 64px;
             border-radius: 50%;
             object-fit: cover;
             box-shadow: 0 4px 12px rgba(13, 71, 161, 0.15);
@@ -117,8 +116,9 @@
         }
 
         .song-meta .song-title {
-            font-size: 1.2rem;
-            font-weight: 600;
+            font-size: 1.5rem;
+            /* más grande */
+            font-weight: 700;
             color: #0a2a4a;
             white-space: nowrap;
             overflow: hidden;
@@ -126,9 +126,10 @@
         }
 
         .song-meta .song-artist {
-            font-size: 0.9rem;
+            font-size: 1.1rem;
+            /* más grande */
             color: #2a4b6e;
-            font-weight: 300;
+            font-weight: 400;
         }
 
         .progress-container {
@@ -139,7 +140,7 @@
         }
 
         .progress-container .time {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             color: #1a3b5c;
             font-weight: 500;
             min-width: 40px;
@@ -269,8 +270,9 @@
         }
 
         .playlist-item .item-cover {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            /* un poco más grande */
+            height: 36px;
             border-radius: 50%;
             object-fit: cover;
             border: 1px solid rgba(255, 255, 255, 0.5);
@@ -285,21 +287,23 @@
         }
 
         .playlist-item .item-title {
-            font-weight: 500;
+            font-weight: 600;
             color: #0a2a4a;
-            font-size: 0.9rem;
+            font-size: 1.0rem;
+            /* más grande */
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
         .playlist-item .item-artist {
-            font-size: 0.75rem;
+            font-size: 0.85rem;
+            /* más grande */
             color: #2a4b6e;
         }
 
         .playlist-item .item-duration {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             color: #5a7a9a;
             margin-left: auto;
             flex-shrink: 0;
@@ -307,7 +311,7 @@
 
         .playlist-item .play-indicator {
             color: #1565c0;
-            font-size: 0.7rem;
+            font-size: 0.8rem;
             margin-left: 6px;
             opacity: 0;
             flex-shrink: 0;
@@ -384,7 +388,6 @@
 
             .container {
                 width: 96%;
-                /* un poco más de ancho en móviles */
                 padding: 16px 12px 20px;
                 border-radius: 24px;
             }
@@ -403,16 +406,18 @@
             }
 
             .song-cover {
-                width: 48px;
-                height: 48px;
+                width: 56px;
+                height: 56px;
             }
 
             .song-meta .song-title {
-                font-size: 1.0rem;
+                font-size: 1.3rem;
+                /* más grande en móvil */
             }
 
             .song-meta .song-artist {
-                font-size: 0.8rem;
+                font-size: 1.0rem;
+                /* más grande en móvil */
             }
 
             .controls {
@@ -432,7 +437,7 @@
             }
 
             .progress-container .time {
-                font-size: 0.7rem;
+                font-size: 0.75rem;
                 min-width: 34px;
             }
 
@@ -445,7 +450,7 @@
             }
 
             .playlist {
-                max-height: 150px;
+                max-height: 160px;
             }
 
             .playlist-item {
@@ -454,20 +459,20 @@
             }
 
             .playlist-item .item-cover {
-                width: 28px;
-                height: 28px;
+                width: 32px;
+                height: 32px;
             }
 
             .playlist-item .item-title {
-                font-size: 0.85rem;
+                font-size: 0.95rem;
             }
 
             .playlist-item .item-artist {
-                font-size: 0.7rem;
+                font-size: 0.8rem;
             }
 
             .playlist-item .item-duration {
-                font-size: 0.7rem;
+                font-size: 0.75rem;
             }
 
             .platform-links {
@@ -497,6 +502,19 @@
                 font-size: 1.5rem;
             }
 
+            .song-cover {
+                width: 48px;
+                height: 48px;
+            }
+
+            .song-meta .song-title {
+                font-size: 1.1rem;
+            }
+
+            .song-meta .song-artist {
+                font-size: 0.9rem;
+            }
+
             .controls .play-btn {
                 width: 50px;
                 height: 50px;
@@ -509,21 +527,12 @@
                 font-size: 1.2rem;
             }
 
-            .song-cover {
-                width: 40px;
-                height: 40px;
-            }
-
-            .song-meta .song-title {
-                font-size: 0.9rem;
-            }
-
             .playlist {
-                max-height: 130px;
+                max-height: 140px;
             }
 
             .playlist-item .item-title {
-                font-size: 0.8rem;
+                font-size: 0.85rem;
             }
         }
 
@@ -552,15 +561,20 @@
 
             .song-info {
                 margin-bottom: 6px;
+                gap: 12px;
             }
 
             .song-cover {
-                width: 36px;
-                height: 36px;
+                width: 40px;
+                height: 40px;
             }
 
             .song-meta .song-title {
-                font-size: 0.9rem;
+                font-size: 1.0rem;
+            }
+
+            .song-meta .song-artist {
+                font-size: 0.85rem;
             }
 
             .controls {
