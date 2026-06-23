@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
     <title>Playlist para ti ❤️</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
@@ -20,7 +20,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 12px;
+            /* reducido para móviles */
         }
 
         .container {
@@ -28,9 +29,10 @@
             width: 100%;
             background: rgba(255, 255, 255, 0.75);
             backdrop-filter: blur(12px);
-            border-radius: 40px;
-            padding: 30px 25px 35px;
-            box-shadow: 0 25px 50px -10px rgba(13, 71, 161, 0.25),
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 32px;
+            padding: 24px 18px 28px;
+            box-shadow: 0 20px 40px -8px rgba(13, 71, 161, 0.25),
                         0 0 0 1px rgba(255, 255, 255, 0.6);
             transition: all 0.3s ease;
         }
@@ -38,11 +40,11 @@
         /* ===== ENCABEZADO ===== */
         .header {
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         .header h1 {
-            font-size: 2.4rem;
+            font-size: 2.2rem;
             font-weight: 700;
             color: #0d47a1;
             letter-spacing: -0.5px;
@@ -50,12 +52,13 @@
         }
 
         .header .subtitle {
-            font-size: 1rem;
+            font-size: 0.95rem;
             color: #1a3b5c;
             margin-top: 4px;
             font-weight: 300;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             opacity: 0.85;
+            padding: 0 8px;
         }
 
         .header .heart {
@@ -64,33 +67,39 @@
         }
 
         @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.3); }
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.3);
+            }
         }
 
         /* ===== REPRODUCTOR ===== */
         .player {
             background: rgba(255, 255, 255, 0.6);
-            border-radius: 30px;
-            padding: 20px 20px 25px;
+            border-radius: 28px;
+            padding: 18px 16px 20px;
             backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
             box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.8),
                         0 8px 20px rgba(13, 71, 161, 0.06);
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         /* ---- Info de la canción con portada ---- */
         .song-info {
             display: flex;
             align-items: center;
-            gap: 16px;
-            margin-bottom: 12px;
-            padding: 0 4px;
+            gap: 14px;
+            margin-bottom: 10px;
+            padding: 0 2px;
         }
 
         .song-cover {
-            width: 60px;
-            height: 60px;
+            width: 56px;
+            height: 56px;
             border-radius: 50%;
             object-fit: cover;
             box-shadow: 0 4px 12px rgba(13, 71, 161, 0.15);
@@ -102,10 +111,11 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            flex: 1;
         }
 
         .song-meta .song-title {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 600;
             color: #0a2a4a;
             white-space: nowrap;
@@ -114,7 +124,7 @@
         }
 
         .song-meta .song-artist {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: #2a4b6e;
             font-weight: 300;
         }
@@ -122,30 +132,34 @@
         .progress-container {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin: 18px 0 12px;
+            gap: 10px;
+            margin: 14px 0 10px;
         }
 
         .progress-container .time {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #1a3b5c;
             font-weight: 500;
-            min-width: 44px;
+            min-width: 40px;
             text-align: center;
+            user-select: none;
         }
 
         .progress-bar {
             flex: 1;
-            height: 5px;
+            height: 6px;
+            /* más gruesa para táctil */
             background: #b3d4f0;
             border-radius: 10px;
             cursor: pointer;
             position: relative;
             transition: height 0.2s;
+            touch-action: none;
+            /* evita scroll al arrastrar */;
         }
 
         .progress-bar:hover {
-            height: 7px;
+            height: 8px;
         }
 
         .progress-bar .progress-fill {
@@ -154,20 +168,21 @@
             background: linear-gradient(90deg, #42a5f5, #0d47a1);
             border-radius: 10px;
             transition: width 0.05s linear;
+            pointer-events: none;
         }
 
         .controls {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 25px;
-            margin: 8px 0 5px;
+            gap: 20px;
+            margin: 6px 0 2px;
         }
 
         .controls button {
             background: transparent;
             border: none;
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             color: #1a3b5c;
             cursor: pointer;
             transition: all 0.2s;
@@ -177,6 +192,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            touch-action: manipulation;
         }
 
         .controls button:hover {
@@ -192,9 +208,9 @@
         .controls .play-btn {
             background: #1565c0;
             color: white;
-            font-size: 2rem;
-            width: 60px;
-            height: 60px;
+            font-size: 1.8rem;
+            width: 64px;
+            height: 64px;
             box-shadow: 0 8px 20px rgba(21, 101, 192, 0.35);
         }
 
@@ -207,14 +223,17 @@
 
         /* ===== LISTA DE CANCIONES ===== */
         .playlist {
-            margin-top: 20px;
-            max-height: 240px;
+            margin-top: 16px;
+            max-height: 200px;
+            /* altura ajustada para móviles */
             overflow-y: auto;
-            padding-right: 6px;
+            padding-right: 4px;
+            -webkit-overflow-scrolling: touch;
+            /* scroll suave en iOS */;
         }
 
         .playlist::-webkit-scrollbar {
-            width: 4px;
+            width: 3px;
         }
 
         .playlist::-webkit-scrollbar-track {
@@ -231,13 +250,14 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 10px 14px;
-            border-radius: 16px;
-            margin-bottom: 4px;
+            padding: 10px 12px;
+            border-radius: 14px;
+            margin-bottom: 3px;
             cursor: pointer;
             transition: all 0.2s;
             background: transparent;
-            gap: 12px;
+            gap: 10px;
+            touch-action: manipulation;
         }
 
         .playlist-item:hover {
@@ -247,14 +267,15 @@
         .playlist-item.active {
             background: rgba(21, 101, 192, 0.12);
             border-left: 4px solid #1565c0;
+            border-radius: 14px 4px 4px 14px;
         }
 
         .playlist-item .item-cover {
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             object-fit: cover;
-            border: 1px solid rgba(255,255,255,0.5);
+            border: 1px solid rgba(255, 255, 255, 0.5);
             flex-shrink: 0;
         }
 
@@ -268,19 +289,19 @@
         .playlist-item .item-title {
             font-weight: 500;
             color: #0a2a4a;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
         .playlist-item .item-artist {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #2a4b6e;
         }
 
         .playlist-item .item-duration {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #5a7a9a;
             margin-left: auto;
             flex-shrink: 0;
@@ -288,10 +309,11 @@
 
         .playlist-item .play-indicator {
             color: #1565c0;
-            font-size: 0.8rem;
-            margin-left: 8px;
+            font-size: 0.7rem;
+            margin-left: 6px;
             opacity: 0;
             flex-shrink: 0;
+            transition: opacity 0.2s;
         }
 
         .playlist-item.active .play-indicator {
@@ -303,31 +325,33 @@
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
-            gap: 18px;
-            margin-top: 28px;
-            padding-top: 20px;
+            gap: 12px;
+            margin-top: 22px;
+            padding-top: 18px;
             border-top: 1px solid rgba(13, 71, 161, 0.15);
         }
 
         .platform-links a {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            padding: 10px 20px;
+            gap: 6px;
+            padding: 8px 16px;
             border-radius: 50px;
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
             color: #0a2a4a;
             text-decoration: none;
             font-weight: 500;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             transition: all 0.25s;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.8);
+            touch-action: manipulation;
         }
 
         .platform-links a i {
-            font-size: 1.4rem;
+            font-size: 1.2rem;
         }
 
         .platform-links a:hover {
@@ -336,37 +360,251 @@
             background: white;
         }
 
-        .platform-links a.spotify:hover { color: #1DB954; border-color: #1DB954; }
-        .platform-links a.apple:hover { color: #fa233b; border-color: #fa233b; }
-        .platform-links a.youtube:hover { color: #ff0000; border-color: #ff0000; }
-        .platform-links a.deezer:hover { color: #A238FF; border-color: #A238FF; }
-        .platform-links a.tidal:hover { color: #000000; border-color: #000000; }
+        .platform-links a.spotify:hover {
+            color: #1DB954;
+            border-color: #1DB954;
+        }
 
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 500px) {
-            .container {
-                padding: 20px 16px 25px;
-                border-radius: 28px;
+        .platform-links a.apple:hover {
+            color: #fa233b;
+            border-color: #fa233b;
+        }
+
+        .platform-links a.youtube:hover {
+            color: #ff0000;
+            border-color: #ff0000;
+        }
+
+        .platform-links a.deezer:hover {
+            color: #A238FF;
+            border-color: #A238FF;
+        }
+
+        .platform-links a.tidal:hover {
+            color: #000000;
+            border-color: #000000;
+        }
+
+        /* ============================================================ */
+        /* ===== RESPONSIVE PARA MÓVILES (pantallas ≤ 600px) ===== */
+        /* ============================================================ */
+
+        @media (max-width: 600px) {
+            body {
+                padding: 8px;
             }
-            .header h1 { font-size: 2rem; }
-            .controls .play-btn { width: 54px; height: 54px; font-size: 1.7rem; }
-            .controls button { font-size: 1.5rem; width: 42px; height: 42px; }
-            .platform-links a { padding: 8px 16px; font-size: 0.85rem; }
-            .platform-links { gap: 12px; }
+
+            .container {
+                padding: 18px 12px 22px;
+                border-radius: 24px;
+                box-shadow: 0 12px 28px rgba(13, 71, 161, 0.2);
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .header .subtitle {
+                font-size: 0.85rem;
+                padding: 0 4px;
+            }
+
+            .player {
+                padding: 14px 12px 16px;
+                border-radius: 22px;
+            }
 
             .song-cover {
                 width: 48px;
                 height: 48px;
             }
+
             .song-meta .song-title {
-                font-size: 1.1rem;
+                font-size: 1.0rem;
             }
+
             .song-meta .song-artist {
+                font-size: 0.8rem;
+            }
+
+            .controls {
+                gap: 14px;
+            }
+
+            .controls button {
+                width: 44px;
+                height: 44px;
+                font-size: 1.4rem;
+            }
+
+            .controls .play-btn {
+                width: 56px;
+                height: 56px;
+                font-size: 1.6rem;
+            }
+
+            .progress-container .time {
+                font-size: 0.7rem;
+                min-width: 34px;
+            }
+
+            .progress-bar {
+                height: 5px;
+            }
+
+            .progress-bar:hover {
+                height: 6px;
+            }
+
+            .playlist {
+                max-height: 160px;
+                /* un poco más compacto */;
+            }
+
+            .playlist-item {
+                padding: 8px 10px;
+                gap: 8px;
+            }
+
+            .playlist-item .item-cover {
+                width: 28px;
+                height: 28px;
+            }
+
+            .playlist-item .item-title {
                 font-size: 0.85rem;
             }
-            .playlist-item .item-cover {
-                width: 30px;
-                height: 30px;
+
+            .playlist-item .item-artist {
+                font-size: 0.7rem;
+            }
+
+            .playlist-item .item-duration {
+                font-size: 0.7rem;
+            }
+
+            .platform-links {
+                gap: 8px;
+                margin-top: 18px;
+                padding-top: 14px;
+            }
+
+            .platform-links a {
+                padding: 6px 12px;
+                font-size: 0.75rem;
+                gap: 4px;
+            }
+
+            .platform-links a i {
+                font-size: 1.0rem;
+            }
+        }
+
+        /* Muy pequeños (≤ 400px) */
+        @media (max-width: 400px) {
+            .container {
+                padding: 14px 10px 18px;
+                border-radius: 20px;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .controls .play-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.4rem;
+            }
+
+            .controls button {
+                width: 38px;
+                height: 38px;
+                font-size: 1.2rem;
+            }
+
+            .song-cover {
+                width: 40px;
+                height: 40px;
+            }
+
+            .song-meta .song-title {
+                font-size: 0.9rem;
+            }
+
+            .playlist-item .item-title {
+                font-size: 0.8rem;
+            }
+
+            .playlist {
+                max-height: 140px;
+            }
+        }
+
+        /* ===== Ajuste para orientación horizontal en móviles ===== */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .container {
+                padding: 12px 16px 16px;
+                border-radius: 20px;
+            }
+
+            .header h1 {
+                font-size: 1.4rem;
+                margin-bottom: 2px;
+            }
+
+            .header .subtitle {
+                font-size: 0.75rem;
+                margin-top: 0;
+            }
+
+            .player {
+                padding: 10px 12px 12px;
+                margin-bottom: 10px;
+            }
+
+            .song-info {
+                margin-bottom: 6px;
+            }
+
+            .song-cover {
+                width: 36px;
+                height: 36px;
+            }
+
+            .song-meta .song-title {
+                font-size: 0.9rem;
+            }
+
+            .controls {
+                gap: 10px;
+            }
+
+            .controls .play-btn {
+                width: 44px;
+                height: 44px;
+                font-size: 1.3rem;
+            }
+
+            .controls button {
+                width: 34px;
+                height: 34px;
+                font-size: 1.1rem;
+            }
+
+            .playlist {
+                max-height: 100px;
+            }
+
+            .platform-links {
+                margin-top: 10px;
+                padding-top: 10px;
+                gap: 6px;
+            }
+
+            .platform-links a {
+                padding: 4px 10px;
+                font-size: 0.7rem;
             }
         }
     </style>
@@ -377,7 +615,7 @@
         <!-- Encabezado -->
         <div class="header">
             <h1>🎵 Para ti <span class="heart">❤️</span></h1>
-            <div class="subtitle">Una playlist con algunas de  las canciones que me hacen pensar en ti 💖</div>
+            <div class="subtitle">Una playlist con algunas de las canciones que me hacen pensar en ti 💖</div>
         </div>
 
         <!-- Reproductor -->
@@ -412,11 +650,9 @@
 
         <!-- Enlaces a plataformas -->
         <div class="platform-links">
-            <a href="#" class="spotify" target="_blank"><i class="fab fa-spotify"></i> Spotify</a>
-            <a href="#" class="apple" target="_blank"><i class="fab fa-apple"></i> Apple Music</a>
-            <a href="#" class="youtube" target="_blank"><i class="fab fa-youtube"></i> YouTube</a>
-            <a href="#" class="deezer" target="_blank"><i class="fab fa-deezer"></i> Deezer</a>
-            <a href="#" class="tidal" target="_blank"><i class="fas fa-music"></i> Tidal</a>
+            <a href="https://open.spotify.com/playlist/4U2VFnuqIf07M08hIUrAsR?si=3c25aaaca0d148c6&pt=b278a5b44d6ed927b333c892213603b4" class="spotify" target="_blank"><i class="fab fa-spotify"></i> Spotify</a>
+            <a href="https://music.apple.com/mx/playlist/canciones-que-me-saben-a-ti/pl.u-KVXBDpBuLoW6z9" class="apple" target="_blank"><i class="fab fa-apple"></i> Apple Music</a>
+            <a href="https://youtu.be/mfhIs1lABqg?si=COJnWe9bEWrk8GOa" class="youtube" target="_blank"><i class="fab fa-youtube"></i> YouTube</a>
         </div>
     </div>
 
@@ -424,8 +660,7 @@
         // ============================================================
         // 1. LISTA DE CANCIONES (¡PERSONALIZA AQUÍ!)
         // ============================================================
-        const songs = [
-            {
+        const songs = [{
                 title: "Buscándote",
                 artist: "Siddhartha",
                 src: "./media/pista/Buscandote.wav",
@@ -500,6 +735,13 @@
                 artist: "Taylor Swift",
                 src: "./media/pista/Paper Rings.wav",
                 cover: "./media/portadas/paper rings.jpg",
+                duration: "3:43"
+            },
+            {
+                title: "Ojitos Lindos",
+                artist: "Bad Bunny",
+                src: "./media/pista/Ojitos Lindos.wav",
+                cover: "./media/portadas/Ojitos Lindos.jpg",
                 duration: "3:43"
             }
         ];
@@ -616,16 +858,21 @@
             progressFill.style.width = percent + '%';
             currentTimeEl.textContent = formatTime(current);
 
-            // Tiempo restante
             const remaining = duration - current;
             remainingTimeEl.textContent = `-${formatTime(remaining)}`;
         }
 
         function setProgress(e) {
             const rect = progressBar.getBoundingClientRect();
-            const clickX = e.clientX - rect.left;
+            let clickX = e.clientX - rect.left;
+            // Para eventos táctiles
+            if (e.touches) {
+                clickX = e.touches[0].clientX - rect.left;
+            }
             const width = rect.width;
-            const percent = clickX / width;
+            let percent = clickX / width;
+            if (percent < 0) percent = 0;
+            if (percent > 1) percent = 1;
             if (audio.duration) {
                 audio.currentTime = percent * audio.duration;
             }
@@ -637,14 +884,14 @@
                 const item = document.createElement('div');
                 item.className = 'playlist-item' + (index === currentIndex ? ' active' : '');
                 item.innerHTML = `
-                    <img class="item-cover" src="${song.cover || ''}" alt="Portada de ${song.title}" />
-                    <div class="item-info">
-                        <span class="item-title">${song.title}</span>
-                        <span class="item-artist">${song.artist}</span>
-                    </div>
-                    <span class="item-duration">${song.duration || '3:00'}</span>
-                    <span class="play-indicator"><i class="fas fa-play"></i></span>
-                `;
+                        <img class="item-cover" src="${song.cover || ''}" alt="Portada de ${song.title}" />
+                        <div class="item-info">
+                            <span class="item-title">${song.title}</span>
+                            <span class="item-artist">${song.artist}</span>
+                        </div>
+                        <span class="item-duration">${song.duration || '3:00'}</span>
+                        <span class="play-indicator"><i class="fas fa-play"></i></span>
+                    `;
                 item.addEventListener('click', () => {
                     loadSong(index);
                     if (!isPlaying) {
@@ -653,6 +900,10 @@
                         updatePlayButton();
                     }
                 });
+                // Soporte táctil
+                item.addEventListener('touchstart', (e) => {
+                    // Solo para evitar conflictos con el click, no es necesario hacer nada adicional
+                }, { passive: true });
                 playlistContainer.appendChild(item);
             });
         }
@@ -667,14 +918,23 @@
 
         audio.addEventListener('timeupdate', updateProgress);
         audio.addEventListener('loadedmetadata', () => {
-            // Al cargar los metadatos, mostramos el tiempo restante inicial
             remainingTimeEl.textContent = `-${formatTime(audio.duration)}`;
         });
         audio.addEventListener('ended', () => {
             nextSong();
         });
 
+        // Eventos para la barra de progreso (ratón y táctil)
         progressBar.addEventListener('click', setProgress);
+        progressBar.addEventListener('touchstart', (e) => {
+            // Prevenir comportamiento por defecto (scroll)
+            e.preventDefault();
+            setProgress(e);
+        }, { passive: false });
+        progressBar.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            setProgress(e);
+        }, { passive: false });
 
         document.addEventListener('keydown', (e) => {
             if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
@@ -692,11 +952,8 @@
         loadSong(0);
 
         // ============================================================
-        // 6. PERSONALIZA LOS ENLACES A PLATAFORMAS
+        // 6. PERSONALIZA LOS ENLACES A PLATAFORMAS (ya están puestos)
         // ============================================================
-        // document.querySelector('.spotify').href = 'https://open.spotify.com/playlist/tu-id';
-        // document.querySelector('.apple').href = 'https://music.apple.com/...';
-        // etc.
     </script>
 </body>
 </html>
