@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Las playlists que borraste 💜</title>
+<style>
+  :root{
+    --bg:#0d0418;
+    --purple:#a855f7;
+    --purple-light:#c084fc;
+    --purple-dark:#7e22ce;
+    --text:#f3e8ff;
+    --muted:#b8a6d9;
+    --card:rgba(168,85,247,.10);
+    --border:rgba(168,85,247,.25);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+
+  body{
+    min-height:100vh;
+    font-family:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",sans-serif;
+    color:var(--text);
+    background:
+      radial-gradient(1200px 600px at 8% -10%, #4c1d95 0%, transparent 55%),
+      radial-gradient(900px 520px at 95% 0%, #7e22ce 0%, transparent 50%),
+      radial-gradient(900px 900px at 50% 120%, #2e1065 0%, transparent 60%),
+      linear-gradient(180deg,#0d0418 0%,#170829 45%,#0d0418 100%);
+    background-attachment:fixed;
+    overflow-x:hidden;
+  }
+
+  .orbe{
+    position:fixed;border-radius:50%;filter:blur(90px);opacity:.32;
+    pointer-events:none;z-index:0;
+  }
+  .orbe.a{width:420px;height:420px;background:#7c3aed;top:-140px;left:-140px;animation:flotar 16s ease-in-out infinite}
+  .orbe.b{width:360px;height:360px;background:#a855f7;bottom:-120px;right:-120px;animation:flotar 20s ease-in-out infinite reverse}
+  @keyframes flotar{
+    0%,100%{transform:translate(0,0)}
+    50%{transform:translate(45px,-35px)}
+  }
+
+  .contenedor{
+    position:relative;z-index:1;
+    max-width:1180px;margin:0 auto;
+    padding:clamp(2rem,6vw,4.5rem) clamp(1rem,4vw,2rem) 4rem;
+  }
+
+  header{text-align:center;margin-bottom:2.75rem}
+
+  .badge{
+    display:inline-flex;align-items:center;gap:.5rem;
+    background:rgba(168,85,247,.14);
+    border:1px solid var(--border);
+    color:var(--purple-light);
+    font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+    padding:.4rem .95rem;border-radius:999px;margin-bottom:1.25rem;
+  }
+  .badge .punto{
+    width:7px;height:7px;border-radius:50%;background:#1ed760;
+    box-shadow:0 0 10px #1ed760;animation:pulso 2s ease-in-out infinite;
+  }
+  @keyframes pulso{0%,100%{opacity:1}50%{opacity:.35}}
+
+  h1{
+    font-size:clamp(2.1rem,6vw,3.6rem);
+    font-weight:800;line-height:1.1;letter-spacing:-.02em;
+    background:linear-gradient(120deg,#ffffff 0%,#e9d5ff 35%,#a855f7 75%,#7c3aed 100%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+    margin-bottom:.85rem;
+  }
+
+  .subtitulo{
+    color:var(--muted);font-size:clamp(.95rem,2.2vw,1.1rem);
+    max-width:560px;margin:0 auto 1.1rem;line-height:1.6;
+  }
+
+  .nota{
+    display:inline-block;
+    font-size:.78rem;color:#8b7aa8;
+    border-top:1px dashed rgba(168,85,247,.3);
+    padding-top:.85rem;
+    margin-bottom:2rem;
+    max-width:460px;line-height:1.6;
+  }
+
+  .buscador{
+    display:flex;align-items:center;gap:.7rem;
+    background:rgba(255,255,255,.045);
+    border:1px solid var(--border);
+    border-radius:999px;
+    padding:.8rem 1.35rem;
+    max-width:460px;margin:0 auto;
+    transition:border-color .25s, box-shadow .25s, background .25s;
+  }
+  .buscador:focus-within{
+    border-color:var(--purple-light);
+    background:rgba(168,85,247,.10);
+    box-shadow:0 0 0 4px rgba(168,85,247,.16);
+  }
+  .buscador svg{flex-shrink:0;color:var(--purple-light)}
+  .buscador input{
+    flex:1;background:none;border:none;outline:none;
+    color:var(--text);font-size:1rem;font-family:inherit;
+  }
+  .buscador input::placeholder{color:#8b7aa8}
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(215px,1fr));
+    gap:1.5rem;
+    margin-top:3rem;
+  }
+
+  .card{
+    position:relative;
+    background:linear-gradient(160deg,rgba(168,85,247,.13),rgba(88,28,135,.07));
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:14px;
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    transition:transform .35s cubic-bezier(.2,.8,.3,1),
+               box-shadow .35s, border-color .35s;
+    animation:aparecer .55s cubic-bezier(.2,.8,.3,1) backwards;
+    animation-delay:var(--delay,0ms);
+  }
+  @keyframes aparecer{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+  .card:hover{
+    transform:translateY(-7px);
+    border-color:rgba(192,132,252,.65);
+    box-shadow:0 22px 45px -16px rgba(168,85,247,.75),
+               0 0 0 1px rgba(192,132,252,.18) inset;
+  }
+
+  .cover{
+    position:relative;aspect-ratio:1;border-radius:13px;overflow:hidden;
+    background:linear-gradient(135deg,#4c1d95,#7e22ce 55%,#a855f7);
+  }
+  .cover img{
+    width:100%;height:100%;object-fit:cover;display:block;
+    opacity:0;transition:opacity .6s ease, transform .5s ease;
+  }
+  .cover img.visible{opacity:1}
+  .card:hover .cover img.visible{transform:scale(1.07)}
+
+  .cover-fallback{
+    position:absolute;inset:0;
+    display:flex;align-items:center;justify-content:center;
+    font-size:3rem;color:rgba(255,255,255,.28);
+  }
+
+  .btn-play{
+    position:absolute;right:10px;bottom:10px;
+    width:44px;height:44px;border-radius:50%;border:none;cursor:pointer;
+    display:grid;place-items:center;
+    background:linear-gradient(135deg,#a855f7,#7c3aed);
+    color:#fff;
+    box-shadow:0 8px 22px -6px rgba(124,58,237,.95);
+    transform:translateY(6px) scale(.9);
+    opacity:0;
+    transition:transform .3s cubic-bezier(.2,.8,.3,1), opacity .3s, background .25s;
+  }
+  .card:hover .btn-play,
+  .btn-play:focus-visible{transform:translateY(0) scale(1);opacity:1}
+  .btn-play:hover{background:linear-gradient(135deg,#c084fc,#a855f7)}
+  .btn-play:active{transform:scale(.93)}
+
+  @media (hover:none){
+    .btn-play{opacity:1;transform:none}
+  }
+
+  .info{padding:.95rem .35rem .3rem}
+  .titulo{
+    font-size:1rem;font-weight:700;line-height:1.35;margin-bottom:.35rem;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+    overflow:hidden;
+  }
+  .desc{
+    font-size:.82rem;color:var(--muted);line-height:1.5;margin-bottom:.7rem;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+    overflow:hidden;
+  }
+  .tags{display:flex;flex-wrap:wrap;gap:.35rem}
+  .tag{
+    font-size:.68rem;font-weight:600;letter-spacing:.03em;
+    padding:.22rem .6rem;border-radius:999px;
+    background:rgba(168,85,247,.16);
+    border:1px solid rgba(168,85,247,.28);
+    color:var(--purple-light);
+  }
+
+  .vacio{
+    grid-column:1/-1;text-align:center;padding:3.5rem 1rem;
+    color:var(--muted);display:none;
+  }
+  .vacio.visible{display:block}
+  .vacio span{font-size:2.5rem;display:block;margin-bottom:.8rem;opacity:.6}
+
+  /* ============ LINKS A PÁGINAS ============ */
+  .links-section{
+    margin-top:5rem;
+    border-top:1px dashed rgba(168,85,247,.25);
+    padding-top:3rem;
+  }
+
+  .links-title{
+    text-align:center;
+    font-size:1.1rem;
+    font-weight:700;
+    color:var(--purple-light);
+    margin-bottom:1.75rem;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:.5rem;
+  }
+
+  .links-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:1rem;
+    max-width:820px;
+    margin:0 auto;
+  }
+
+  .link-pagina{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:.6rem;
+    padding:1rem 1.25rem;
+    background:linear-gradient(150deg,rgba(168,85,247,.14),rgba(88,28,135,.08));
+    border:1px solid var(--border);
+    border-radius:14px;
+    color:var(--text);
+    text-decoration:none;
+    font-weight:600;
+    font-size:.95rem;
+    text-align:center;
+    transition:transform .3s cubic-bezier(.2,.8,.3,1),
+               border-color .3s, box-shadow .3s, background .3s;
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+  }
+
+  .link-pagina:hover{
+    transform:translateY(-4px);
+    border-color:rgba(192,132,252,.7);
+    background:linear-gradient(150deg,rgba(168,85,247,.24),rgba(88,28,135,.14));
+    box-shadow:0 16px 32px -14px rgba(168,85,247,.7);
+  }
+
+  .link-pagina .emoji{
+    font-size:1.15rem;
+    line-height:1;
+  }
+
+  .link-pagina .flecha{
+    color:var(--purple-light);
+    transition:transform .3s;
+    margin-left:.15rem;
+  }
+
+  .link-pagina:hover .flecha{
+    transform:translateX(3px);
+  }
+
+  /* ============ MODAL ============ */
+  .modal{
+    position:fixed;inset:0;z-index:50;
+    display:grid;place-items:center;
+    padding:1.25rem;
+    opacity:0;visibility:hidden;
+    transition:opacity .3s, visibility .3s;
+  }
+  .modal.abierto{opacity:1;visibility:visible}
+
+  .modal-backdrop{
+    position:absolute;inset:0;
+    background:rgba(8,2,16,.82);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+    cursor:pointer;
+  }
+
+  .modal-caja{
+    position:relative;
+    width:min(560px,100%);
+    background:linear-gradient(165deg,#241040,#160829);
+    border:1px solid rgba(168,85,247,.4);
+    border-radius:22px;
+    padding:1.5rem;
+    box-shadow:0 35px 80px -20px rgba(124,58,237,.8);
+    transform:translateY(24px) scale(.96);
+    transition:transform .35s cubic-bezier(.2,.8,.3,1);
+    max-height:92vh;overflow-y:auto;
+  }
+  .modal.abierto .modal-caja{transform:translateY(0) scale(1)}
+
+  .modal-cabecera{
+    display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.1rem;
+  }
+  .modal-cabecera h3{
+    flex:1;font-size:1.15rem;font-weight:700;line-height:1.35;
+  }
+  .btn-cerrar{
+    flex-shrink:0;
+    width:36px;height:36px;border-radius:50%;cursor:pointer;
+    background:rgba(168,85,247,.16);
+    border:1px solid rgba(168,85,247,.3);
+    color:var(--text);font-size:1rem;line-height:1;
+    display:grid;place-items:center;
+    transition:background .2s, transform .2s;
+  }
+  .btn-cerrar:hover{background:rgba(168,85,247,.35);transform:rotate(90deg)}
+
+  .modal-player iframe{
+    border-radius:14px;display:block;border:0;
+  }
+
+  .modal-link{
+    display:inline-flex;align-items:center;gap:.5rem;
+    margin-top:1rem;font-size:.88rem;font-weight:600;
+    color:#1ed760;text-decoration:none;
+    transition:opacity .2s;
+  }
+  .modal-link:hover{opacity:.75}
+
+  footer{
+    text-align:center;margin-top:4.5rem;
+    color:#7c6b96;font-size:.82rem;line-height:1.7;
+  }
+  footer a{color:var(--purple-light);text-decoration:none}
+  footer a:hover{text-decoration:underline}
+
+  ::-webkit-scrollbar{width:10px}
+  ::-webkit-scrollbar-track{background:#150726}
+  ::-webkit-scrollbar-thumb{
+    background:linear-gradient(#7c3aed,#a855f7);
+    border-radius:10px;border:2px solid #150726;
+  }
+
+  @media (max-width:520px){
+    .grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:1rem}
+    .titulo{font-size:.9rem}
+    .desc{font-size:.76rem}
+    .links-grid{grid-template-columns:1fr 1fr;gap:.75rem}
+    .link-pagina{padding:.85rem .75rem;font-size:.85rem}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+  }
+</style>
+</head>
+<body>
+
+<div class="orbe a"></div>
+<div class="orbe b"></div>
+
+<div class="contenedor">
+
+  <header>
+    <div class="badge"><span class="punto"></span> Recuperadas</div>
+    <h1>Las playlists que borraste</h1>
+    <p class="subtitulo">
+      Te prometi que eran para ti, y siguen siendo tuyas.
+      Todavía se pueden escuchar, así que aquí siguen, esperándote.
+    </p>
+    <p class="nota">
+      Nota: un buscador por si luego son muchas más y porque el señorito estaba aburrido
+    </p>
+
+    <div class="buscador">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+        <circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>
+      </svg>
+      <input id="buscador" type="search" placeholder="Buscar playlist…" aria-label="Buscar playlist">
+    </div>
+  </header>
+
+  <main class="grid" id="grid">
+    <div class="vacio" id="vacio">
+      <span>🔍</span>
+      No hay ninguna playlist con ese nombre...aun.
+    </div>
+  </main>
+
+  <!-- ============ LINKS A LAS PÁGINAS ============ -->
+  <section class="links-section">
+    <h2 class="links-title">
+      <span>✨</span> Otras páginas
+    </h2>
+    <nav class="links-grid">
+      <a class="link-pagina" href=";0/index.html">
+        <span class="emoji">💌</span>
+        ;0
+        <span class="flecha">→</span>
+      </a>
+      <a class="link-pagina" href="fix_u/index.html">
+        <span class="emoji">💜</span>
+        fix_u
+        <span class="flecha">→</span>
+      </a>
+      <a class="link-pagina" href="Hablame de mi/index.html">
+        <span class="emoji">🎵</span>
+        Háblame de mí
+        <span class="flecha">→</span>
+      </a>
+      <a class="link-pagina" href="NewPaper/index.html">
+        <span class="emoji">📰</span>
+        NewPaper
+        <span class="flecha">→</span>
+      </a>
+      <a class="link-pagina" href="Sunflower/index.html">
+        <span class="emoji">🌻</span>
+        Sunflower
+        <span class="flecha">→</span>
+      </a>
+    </nav>
+  </section>
+
+  <footer>
+    Hecho con 💜 para ti · Siempre tuyo Luis 💖<br>
+    <a href="https://open.spotify.com" target="_blank" rel="noopener">Abrir Spotify</a>
+  </footer>
+
+</div>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitulo">
+  <div class="modal-backdrop" data-cerrar></div>
+  <div class="modal-caja">
+    <div class="modal-cabecera">
+      <h3 id="modalTitulo">Playlist</h3>
+      <button class="btn-cerrar" data-cerrar aria-label="Cerrar">✕</button>
+    </div>
+    <div class="modal-player" id="modalPlayer"></div>
+    <a class="modal-link" id="modalLink" href="#" target="_blank" rel="noopener">
+      Abrir en Spotify
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M7 17 17 7M9 7h8v8"/>
+      </svg>
+    </a>
+  </div>
+</div>
+
+<script>
+const PLAYLISTS = [
+  {
+    id: "5QdHUZjeSW9tKkJsAUSbSS",
+    nombre: "Playlist 01",
+    descripcion: "La primera, la que inicio todo.",
+    tags: ["Recuperada"]
+  },
+  {
+    id: "2GrwQ7BdorIQqHNrX47zcv",
+    nombre: "Playlist 02",
+    descripcion: "Aun debemos bailarlas bajo la lluvia.",
+    tags: ["Recuperada"]
+  },
+  {
+    id: "3xAPqCRAKaz4i9K1MJ16oQ",
+    nombre: "Playlist 03",
+    descripcion: "Hay una libreta hablando de todo esto...literal.",
+    tags: ["Recuperada"]
+  }
+];
+
+const grid        = document.getElementById("grid");
+const vacio       = document.getElementById("vacio");
+const inputBuscar = document.getElementById("buscador");
+
+const modal       = document.getElementById("modal");
+const modalTitulo = document.getElementById("modalTitulo");
+const modalPlayer = document.getElementById("modalPlayer");
+const modalLink   = document.getElementById("modalLink");
+
+const normalizar = (t) =>
+  String(t).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+function crearTarjeta(p, i) {
+  const card = document.createElement("article");
+  card.className = "card";
+  card.style.setProperty("--delay", (i * 90) + "ms");
+
+  card.innerHTML = `
+    <div class="cover">
+      <div class="cover-fallback">♪</div>
+      <img alt="" loading="lazy">
+      <button class="btn-play" type="button" aria-label="Reproducir playlist">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+          <path d="M8 5v14l11-7z"/>
+        </svg>
+      </button>
+    </div>
+    <div class="info">
+      <h3 class="titulo"></h3>
+      <p class="desc"></p>
+      <div class="tags"></div>
+    </div>
+  `;
+
+  const img      = card.querySelector("img");
+  const tituloEl = card.querySelector(".titulo");
+  const descEl   = card.querySelector(".desc");
+  const tagsEl   = card.querySelector(".tags");
+
+  tituloEl.textContent = p.nombre || "Playlist";
+  descEl.textContent   = p.descripcion || "";
+  if (!p.descripcion) descEl.remove();
+
+  (p.tags || []).forEach((t) => {
+    const span = document.createElement("span");
+    span.className = "tag";
+    span.textContent = t;
+    tagsEl.appendChild(span);
+  });
+
+  cargarPortada(p, img, tituloEl);
+
+  card.querySelector(".btn-play").addEventListener("click", () => {
+    abrirModal(p, p._titulo || p.nombre || "Playlist");
+  });
+
+  card.dataset.busqueda = normalizar(
+    [p.nombre, p.descripcion, ...(p.tags || [])].join(" ")
+  );
+
+  return card;
+}
+
+async function cargarPortada(p, img, tituloEl) {
+  try {
+    const endpoint =
+      "https://open.spotify.com/oembed?url=" +
+      encodeURIComponent("https://open.spotify.com/playlist/" + p.id);
+
+    const res = await fetch(endpoint);
+    if (!res.ok) throw new Error("Sin respuesta");
+
+    const data = await res.json();
+
+    if (data.thumbnail_url) {
+      img.src = data.thumbnail_url;
+      img.addEventListener("load", () => img.classList.add("visible"), { once: true });
+    }
+    if (data.title) {
+      p._titulo = data.title;
+      if (!p.nombre || /^Playlist \d+$/.test(p.nombre)) {
+        tituloEl.textContent = data.title;
+      }
+    }
+  } catch (e) {
+    /* Si la playlist fue borrada, se queda el degradado morado */
+  }
+}
+
+const tarjetas = PLAYLISTS.map((p, i) => {
+  const card = crearTarjeta(p, i);
+  grid.insertBefore(card, vacio);
+  return card;
+});
+
+inputBuscar.addEventListener("input", (e) => {
+  const q = normalizar(e.target.value.trim());
+  let visibles = 0;
+
+  tarjetas.forEach((card) => {
+    const coincide = !q || card.dataset.busqueda.includes(q);
+    card.style.display = coincide ? "" : "none";
+    if (coincide) visibles++;
+  });
+
+  vacio.classList.toggle("visible", visibles === 0);
+});
+
+function abrirModal(p, titulo) {
+  modalTitulo.textContent = titulo;
+
+  modalPlayer.innerHTML = `
+    <iframe
+      src="https://open.spotify.com/embed/playlist/${p.id}?utm_source=generator&theme=0"
+      width="100%" height="380" frameborder="0"
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+      loading="lazy">
+    </iframe>`;
+
+  modalLink.href = "https://open.spotify.com/playlist/" + p.id;
+  modal.classList.add("abierto");
+  document.body.style.overflow = "hidden";
+}
+
+function cerrarModal() {
+  modal.classList.remove("abierto");
+  document.body.style.overflow = "";
+  setTimeout(() => { modalPlayer.innerHTML = ""; }, 300);
+}
+
+modal.querySelectorAll("[data-cerrar]").forEach((el) =>
+  el.addEventListener("click", cerrarModal)
+);
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && modal.classList.contains("abierto")) cerrarModal();
+});
+</script>
+
+</body>
+</html>
