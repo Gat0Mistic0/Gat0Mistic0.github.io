@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>🐑 Borrego Pastando - Área por Fuerza Bruta</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --panel: #16213e;
+    --accent: #e94560;
+    --accent2: #0f3460;
+    --text: #eaeaea;
+    --green: #4ecca3;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 20px;
+  }
+  h1 {
+    text-align: center;
+    font-size: 2.2em;
+    margin: 10px 0;
+    background: linear-gradient(90deg, var(--accent), var(--green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .subtitle {
+    text-align: center;
+    color: #9aa;
+    margin-bottom: 25px;
+    font-style: italic;
+  }
+  .container {
+    max-width: 1300px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 900px) {
+    .container { grid-template-columns: 1fr; }
+  }
+  .card {
+    background: var(--panel);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    border: 1px solid #233;
+  }
+  .card h2 {
+    margin-top: 0;
+    color: var(--accent);
+    font-size: 1.2em;
+    border-bottom: 1px solid #233;
+    padding-bottom: 8px;
+  }
+  label {
+    display: block;
+    margin: 12px 0 6px;
+    font-weight: 600;
+    color: var(--green);
+    font-size: 0.9em;
+  }
+  input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #345;
+    background: #0f1729;
+    color: var(--text);
+    font-size: 1em;
+  }
+  input[type="range"] {
+    width: 100%;
+    accent-color: var(--accent);
+  }
+  .btn-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 15px;
+  }
+  button {
+    flex: 1;
+    padding: 12px;
+    background: linear-gradient(90deg, var(--accent), #c73650);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.1s;
+  }
+  button:hover { transform: scale(1.02); }
+  button:active { transform: scale(0.98); }
+  button.secondary {
+    background: linear-gradient(90deg, var(--accent2), #1a4a80);
+  }
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+  .stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 15px;
+  }
+  .stat {
+    background: #0f1729;
+    padding: 10px;
+    border-radius: 6px;
+    text-align: center;
+  }
+  .stat .valor {
+    font-size: 1.4em;
+    color: var(--green);
+    font-weight: bold;
+    font-family: 'Consolas', monospace;
+  }
+  .stat .etiqueta {
+    font-size: 0.75em;
+    color: #789;
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+  canvas {
+    width: 100%;
+    background: #0a0f1f;
+    border-radius: 8px;
+    display: block;
+  }
+  .formula {
+    background: #0a0f1f;
+    padding: 15px;
+    border-radius: 8px;
+    font-family: 'Consolas', monospace;
+    font-size: 0.85em;
+    line-height: 1.6;
+    color: #cde;
+    border-left: 4px solid var(--accent);
+    overflow-x: auto;
+    margin-top: 15px;
+  }
+  .formula .hl { color: var(--green); }
+  .formula .dim { color: #789; }
+  .presets {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+  .presets button {
+    flex: 1;
+    min-width: 70px;
+    padding: 6px;
+    font-size: 0.75em;
+    background: var(--accent2);
+  }
+</style>
+</head>
+<body>
+
+<h1>🐑 Borrego Pastando</h1>
+<p class="subtitle">Ve cómo el borrego recorre toda su área hasta completarla</p>
+
+<div class="container">
+  <!-- PANEL IZQUIERDO -->
+  <div>
+    <div class="card">
+      <h2>⚙️ Parámetros</h2>
+
+      <label>Lado del cuadrado (L)</label>
+      <input type="number" id="lado" value="4" min="0.1" step="0.1">
+
+      <label>Longitud de la cuerda (R)</label>
+      <input type="number" id="cuerda" value="3" min="0.1" step="0.1">
+
+      <label>Velocidad del borrego: <span id="velLabel">50</span> px/frame</label>
+      <input type="range" id="vel" min="5" max="300" value="50" step="5">
+
+      <div class="btn-row">
+        <button id="btnPlay" onclick="togglePlay()">▶️ Pastar</button>
+        <button class="secondary" onclick="resetear()">🔄 Reset</button>
+      </div>
+
+      <div class="presets">
+        <button onclick="setPreset(4,3)">4×4, R=3</button>
+        <button onclick="setPreset(4,2)">4×4, R=2</button>
+        <button onclick="setPreset(4,4)">4×4, R=4</button>
+        <button onclick="setPreset(4,6)">4×4, R=6</button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:20px;">
+      <h2>📊 Progreso del pastoreo</h2>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="valor" id="areaPastada">0.000</div>
+          <div class="etiqueta">Área pastada</div>
+        </div>
+        <div class="stat">
+          <div class="valor" id="areaTotal">0.000</div>
+          <div class="etiqueta">Área total</div>
+        </div>
+        <div class="stat">
+          <div class="valor" id="porcentaje">0%</div>
+          <div class="etiqueta">Completado</div>
+        </div>
+        <div class="stat">
+          <div class="valor" id="pasos">0</div>
+          <div class="etiqueta">Pasos</div>
+        </div>
+      </div>
+
+      <div class="formula" id="formulaBox">Cargando fórmula...</div>
+    </div>
+  </div>
+
+  <!-- CANVAS -->
+  <div class="card">
+    <h2>🗺️ El corral del borrego</h2>
+    <canvas id="canvas" width="700" height="700"></canvas>
+    <p style="text-align:center;font-size:0.85em;color:#789;margin:10px 0 0;">
+      🐑 camina aleatoriamente · deja rastro verde donde pasta · el círculo rojo es el límite de la cuerda
+    </p>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// Estado global
+// ============================================================
+let L = 4, R = 3;
+let canvas, ctx;
+let W, H, margen, escala, ox, oy;
+
+// Grid de pastoreo (para saber qué ya se pastó)
+let gridPastado;      // matriz booleana
+let gridRes = 200;    // resolución de la grid
+
+// Borrego
+let borrego = { x: 0.15, y: 0.15, dir: Math.random() * Math.PI * 2 };
+
+// Estado de animación
+let animando = false;
+let rafId = null;
+let pasos = 0;
+
+// Área
+let areaTotal = 0;
+let areaPastada = 0;
+const AREA_POR_PASO = null; // se calcula según gridRes
+
+// ============================================================
+// Inicialización
+// ============================================================
+function $(id) { return document.getElementById(id); }
+
+function setupCanvas() {
+  canvas = $('canvas');
+  ctx = canvas.getContext('2d');
+  W = canvas.width;
+  H = canvas.height;
+  margen = 50;
+
+  // Escala para que quepa el cuadrado (y algo del círculo)
+  const maxDim = Math.max(L, R);
+  escala = Math.min(W - 2 * margen, H - 2 * margen) / maxDim;
+
+  // Origen: esquina inferior-izquierda del cuadrado
+  ox = margen;
+  oy = H - margen;
+}
+
+function tx(x) { return ox + x * escala; }
+function ty(y) { return oy - y * escala; }
+
+// ============================================================
+// Fórmula analítica del área
+// ============================================================
+function areaAnalitica(L, R) {
+  if (R <= L) {
+    return 0.25 * Math.PI * R * R;
+  } else if (R <= L * Math.SQRT2) {
+    const theta = Math.acos(L / R);
+    const segmento = 0.5 * R * R * (theta - Math.sin(theta));
+    return 0.25 * Math.PI * R * R - 2 * segmento;
+  } else {
+    return L * L;
+  }
+}
+
+function generarFormula(L, R) {
+  let caso, formula;
+  if (R <= L) {
+    caso = "R ≤ L";
+    formula = `A = (1/4)·π·R² = <span class="hl">${areaAnalitica(L,R).toFixed(4)}</span>`;
+  } else if (R <= L * Math.SQRT2) {
+    caso = "L < R ≤ L√2";
+    const theta = Math.acos(L / R);
+    formula = `A = (1/4)·π·R² − 2·Segmento(θ)<br>
+      &nbsp;&nbsp;θ = arccos(L/R) = ${theta.toFixed(4)} rad<br>
+      &nbsp;&nbsp;A = <span class="hl">${areaAnalitica(L,R).toFixed(4)}</span>`;
+  } else {
+    caso = "R > L√2";
+    formula = `A = L² = <span class="hl">${areaAnalitica(L,R).toFixed(4)}</span>`;
+  }
+  return `<span class="dim">// Caso: ${caso}</span><br>${formula}`;
+}
+
+// ============================================================
+// Resetear todo
+// ============================================================
+function resetear() {
+  animando = false;
+  if (rafId) cancelAnimationFrame(rafId);
+  rafId = null;
+  $('btnPlay').textContent = '▶️ Pastar';
+
+  L = parseFloat($('lado').value) || 4;
+  R = parseFloat($('cuerda').value) || 3;
+
+  setupCanvas();
+
+  // Inicializar grid de pastoreo
+  gridPastado = [];
+  for (let i = 0; i < gridRes; i++) {
+    gridPastado.push(new Array(gridRes).fill(false));
+  }
+
+  // Área total = área analítica
+  areaTotal = areaAnalitica(L, R);
+  areaPastada = 0;
+  pasos = 0;
+
+  // Borrego en la esquina
+  borrego = { x: 0.15, y: 0.15, dir: Math.random() * Math.PI * 2 };
+
+  // Actualizar UI
+  $('areaTotal').textContent = areaTotal.toFixed(3);
+  $('areaPastada').textContent = '0.000';
+  $('porcentaje').textContent = '0%';
+  $('pasos').textContent = '0';
+  $('formulaBox').innerHTML = generarFormula(L, R);
+
+  dibujarTodo();
+}
+
+// ============================================================
+// ¿Está (x,y) dentro del área accesible?
+// ============================================================
+function dentro(x, y) {
+  return x >= 0 && x <= L && y >= 0 && y <= L && (x*x + y*y) <= R*R;
+}
+
+// ============================================================
+// Marcar zona pastada alrededor del borrego (radio de "boca")
+// ============================================================
+const RADIO_BOCA = 0.06; // en unidades del mundo
+
+function pastar(x, y) {
+  const celdasPorUnidad = gridRes / L;
+  const radioCeldas = RADIO_BOCA * celdasPorUnidad;
+  const cx = Math.floor(x / L * gridRes);
+  const cy = Math.floor(y / L * gridRes);
+  const rc = Math.ceil(radioCeldas);
+  const r2 = radioCeldas * radioCeldas;
+
+  for (let dy = -rc; dy <= rc; dy++) {
+    for (let dx = -rc; dx <= rc; dx++) {
+      if (dx*dx + dy*dy > r2) continue;
+      const gx = cx + dx;
+      const gy = cy + dy;
+      if (gx < 0 || gx >= gridRes || gy < 0 || gy >= gridRes) continue;
+      if (gridPastado[gy][gx]) continue;
+
+      // Verificar que esa celda esté dentro del área accesible
+      const px = (gx + 0.5) * L / gridRes;
+      const py = (gy + 0.5) * L / gridRes;
+      if (dentro(px, py)) {
+        gridPastado[gy][gx] = true;
+        areaPastada += (L / gridRes) * (L / gridRes);
+      }
+    }
+  }
+}
+
+// ============================================================
+// Un paso del borrego
+// ============================================================
+function pasoBorrego() {
+  const velocidad = parseInt($('vel').value) / 1000; // en unidades del mundo
+
+  // Caminar en una dirección con un poco de ruido (movimiento tipo "random walk")
+  borrego.dir += (Math.random() - 0.5) * 0.8;
+
+  let nx = borrego.x + Math.cos(borrego.dir) * velocidad;
+  let ny = borrego.y + Math.sin(borrego.dir) * velocidad;
+
+  // Si se sale del área accesible, rebotar
+  if (!dentro(nx, ny)) {
+    // Probar dirección reflejada
+    borrego.dir += Math.PI + (Math.random() - 0.5);
+    nx = borrego.x + Math.cos(borrego.dir) * velocidad;
+    ny = borrego.y + Math.sin(borrego.dir) * velocidad;
+
+    // Si aún así no, no moverse
+    if (!dentro(nx, ny)) {
+      nx = borrego.x;
+      ny = borrego.y;
+    }
+  }
+
+  borrego.x = nx;
+  borrego.y = ny;
+
+  pastar(nx, ny);
+  pasos++;
+}
+
+// ============================================================
+// Dibujar TODO
+// ============================================================
+function dibujarTodo() {
+  // Fondo
+  ctx.fillStyle = '#0a0f1f';
+  ctx.fillRect(0, 0, W, H);
+
+  // Cuadrado (corral) - fondo
+  ctx.fillStyle = 'rgba(120, 130, 160, 0.08)';
+  ctx.fillRect(tx(0), ty(L), L * escala, L * escala);
+  ctx.strokeStyle = '#8899bb';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(tx(0), ty(L), L * escala, L * escala);
+
+  // Rastro de pastoreo (grid)
+  const cellSize = (L * escala) / gridRes;
+  for (let gy = 0; gy < gridRes; gy++) {
+    for (let gx = 0; gx < gridRes; gx++) {
+      if (gridPastado[gy][gx]) {
+        const px = tx(gx * L / gridRes);
+        const py = ty((gy + 1) * L / gridRes);
+        ctx.fillStyle = 'rgba(78, 204, 163, 0.55)';
+        ctx.fillRect(px, py, cellSize + 0.5, cellSize + 0.5);
+      }
+    }
+  }
+
+  // Borde del círculo (alcance de la cuerda)
+  ctx.beginPath();
+  ctx.moveTo(tx(0), ty(0));
+  ctx.arc(tx(0), ty(0), R * escala, -Math.PI / 2, 0, false);
+  ctx.closePath();
+  ctx.strokeStyle = '#e94560';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Esquina opuesta (referencia)
+  ctx.beginPath();
+  ctx.arc(tx(L), ty(L), 4, 0, Math.PI * 2);
+  ctx.fillStyle = '#8899bb';
+  ctx.fill();
+
+  // Borrego
+  ctx.font = `${Math.max(20, escala * 0.5)}px serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('🐑', tx(borrego.x), ty(borrego.y));
+
+  // Etiquetas
+  ctx.fillStyle = '#eaeaea';
+  ctx.font = '14px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(`L = ${L}`, tx(L / 2), ty(0) + 25);
+  ctx.save();
+  ctx.translate(tx(0) - 30, ty(L / 2));
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText(`L = ${L}`, 0, 0);
+  ctx.restore();
+
+  // Radio
+  ctx.fillStyle = '#e94560';
+  ctx.font = '13px sans-serif';
+  const ang = Math.PI / 4;
+  ctx.fillText(`R = ${R}`, tx(R * 0.55 * Math.cos(ang)), ty(R * 0.55 * Math.sin(ang)) - 12);
+}
+
+// ============================================================
+// Loop de animación
+// ============================================================
+function loop() {
+  if (!animando) return;
+
+  // Varios pasos por frame para que sea rápido
+  const pasosPorFrame = 3;
+  for (let i = 0; i < pasosPorFrame; i++) {
+    pasoBorrego();
+  }
+
+  // Actualizar UI
+  $('areaPastada').textContent = areaPastada.toFixed(3);
+  $('pasos').textContent = pasos.toLocaleString();
+  const pct = areaTotal > 0 ? (areaPastada / areaTotal) * 100 : 0;
+  $('porcentaje').textContent = Math.min(pct, 100).toFixed(1) + '%';
+
+  dibujarTodo();
+
+  // ¿Ya terminó?
+  if (pct >= 99.5) {
+    animando = false;
+    $('btnPlay').textContent = '▶️ Pastar';
+    return;
+  }
+
+  rafId = requestAnimationFrame(loop);
+}
+
+// ============================================================
+// Botones
+// ============================================================
+function togglePlay() {
+  if (animando) {
+    animando = false;
+    $('btnPlay').textContent = '▶️ Pastar';
+    if (rafId) cancelAnimationFrame(rafId);
+  } else {
+    animando = true;
+    $('btnPlay').textContent = '⏸️ Pausar';
+    loop();
+  }
+}
+
+function setPreset(l, r) {
+  $('lado').value = l;
+  $('cuerda').value = r;
+  resetear();
+}
+
+// ============================================================
+// Eventos
+// ============================================================
+$('vel').addEventListener('input', e => $('velLabel').textContent = e.target.value);
+$('lado').addEventListener('change', resetear);
+$('cuerda').addEventListener('change', resetear);
+
+// Arrancar
+window.addEventListener('load', resetear);
+</script>
+</body>
+</html>
